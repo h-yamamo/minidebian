@@ -1,2 +1,1 @@
-# minidebian
-mini Debian
+# mini Debian
