@@ -7,9 +7,10 @@ busybox
 ca-certificates
 console-setup
 cpufrequtils
-cryptsetup-run
+cryptsetup-bin
 dc
 debootstrap
+dmsetup
 dnsutils
 dosfstools
 dump
