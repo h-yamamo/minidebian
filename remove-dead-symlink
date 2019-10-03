@@ -1,0 +1,9 @@
+#!/bin/sh
+
+syml="$1"
+
+if ! $(stat -L "$syml" >/dev/null)
+then
+	set -x
+	rm -f "$syml"
+fi

@@ -1,0 +1,364 @@
+#!/bin/sh -e
+
+kv="$1"
+
+arch_deb=`dpkg --print-architecture`
+
+case "$arch_deb" in
+  amd64)
+    arch_triple="x86_64-linux-gnu"
+    arch_prefix="x86_64-linux-gnu"
+    ;;
+  i386)
+    arch_triple="i386-linux-gnu"
+    arch_prefix="i686-linux-gnu"
+    ;;
+  x32)
+    arch_triple="x86_64-linux-gnux32"
+    arch_prefix="x86_64-linux-gnux32"
+    ;;
+  *)
+    echo "not supported architecture."; exit 1
+    ;;
+esac
+
+set -x
+
+# source: w0/ and the current system
+# dest: w2/ second stage in initrd
+cp -a w0/main/run w2/
+(cd w2; cp -a run media; cp -a run mnt; cp -a run proc; cp -a run sys;
+ mkdir -p dev etc home usr/bin usr/lib/${arch_triple} usr/sbin var/lib;
+	ln -s usr/bin bin;
+	ln -s usr/lib lib;
+	ln -s usr/sbin sbin)
+#	      ^^^ merged /usr
+[ "$arch_deb" = "amd64" ] && (cd w2; mkdir usr/lib64; ln -s usr/lib64 lib64)
+[ "$arch_deb" = "x32" ] && (cd w2; mkdir usr/libx32; ln -s usr/libx32 libx32)
+
+
+# basic ld and libs
+(cd w0/main/usr/lib/;
+ find klibc-*.so ld-linux*.so* | cpio -pdm ../../../../w2/usr/lib/)
+(cd w0/main/usr/lib/${arch_triple}/;
+ find ld-2.*.so ld-linux*.so* libc-2.*.so libc.so.6 libdl-2.*.so libdl.so.2 \
+	| cpio -pdm ../../../../../w2/usr/lib/${arch_triple}/)
+[ "$arch_deb" = "amd64" ] && \
+  (cd w0/main/usr/lib64/;
+	find ld-linux-*.so* | cpio -pdm ../../../../w2/usr/lib64/)
+[ "$arch_deb" = "x32" ] && \
+  (cd w0/main/usr/libx32/;
+	find ld-linux-*.so* | cpio -pdm ../../../../w2/usr/libx32/)
+
+# etc
+(cd w0/main/etc/; find ld.so.conf* modprobe.d | cpio -pdm ../../../w2/etc/)
+
+# copy busybox
+cp -p w0/main/bin/busybox w2/bin/
+ln w2/usr/bin/busybox w2/usr/sbin/busybox
+
+# busybox symlink
+bbx_bin="[ [[ ar arch ash basename bunzip2 bzcat bzip2 cal cat chgrp chvt \
+  clear cmp cpio cttyhack cut deallocvt dirname dmesg dnsdomainname dos2unix \
+  dumpkmap dumpleases egrep env expand expr factor fallocate false fatattr \
+  fgrep fold free ftpget ftpput grep groups gunzip gzip head hostid hostname \
+  id ionice ipcalc kill killall last link ln logger logname lsscsi \
+  lzcat lzma lzop md5sum microcom mkdir mkfifo mknod mkpasswd mktemp more mt \
+  netstat nl nproc nslookup od openvt paste patch pidof printf pwd realpath \
+  renice rev rm rmdir rpm rpm2cpio run-parts seq setkeycodes setpriv setsid \
+  sh sha1sum sha256sum sha512sum shred sleep sort ssl_client stat strings \
+  stty sync tac tail taskset tee test tftp time timeout touch tr traceroute \
+  true truncate tty uname uncompress unexpand uniq unix2dos unlink unlzma \
+  unzip uptime usleep uudecode uuencode w watch wc which who whoami xxd \
+  yes zcat"
+
+bbx_sbin="acpid adjtimex arp arping blockdev blkdiscard brctl chroot \
+  devmem freeramdisk fsfreeze fstrim getty halt httpd hwclock ifconfig init \
+  ipneigh klogd linux32 linux64 loadfont loadkmap logread \
+  mkdosfs mkswap nameif partprobe pivot_root poweroff \
+  rdate reboot route swapoff swapon switch_root syslogd udhcpc udhcpd \
+  vconfig watchdog"
+
+(cd w2/usr/bin/; for x in $bbx_bin; do ln -s busybox $x; done)
+(cd w2/usr/sbin/; for x in $bbx_sbin; do ln -s busybox $x; done)
+
+
+## Collect the required kernel modules
+
+mods=`grep -E '^[a-z]' data/linux-4.19_deb10_modules-list`
+cd w2
+
+for x in $mods; do find /lib/modules/${kv}/kernel/$x | cpio -pdm . ; done
+
+cp -p /lib/modules/${kv}/modules.builtin /lib/modules/${kv}/modules.order \
+	./usr/lib/modules/${kv}/
+
+# Make sure whether dependency problem occures or not
+/sbin/depmod -b . -F /boot/System.map-${kv} -ae ${kv}
+echo
+
+
+## Collect the required firmwares
+#    Firmware packages:
+#	firmware-amd-graphics
+#	firmware-atheros
+#	firmware-b43-installer
+#	firmware-bnx2, firmware-bnx2x, firmware-brcm80211
+#	firmware-intelwimax
+#	firmware-ipw2x00
+#	firmware-iwlwifi
+#	firmware-linux-free
+#	firmware-misc-nonfree
+#	firmware-realtek
+
+fmws=`grep -E '^[3Ra-z]' ../data/firmware-list`
+
+for x in $fmws; do find /lib/firmware/$x | cpio -pdm . ; done
+
+
+dpkg -L less | grep lessecho | grep bin | grep usr && less_p="/usr"
+
+## /bin/ binary executables
+[ -z "$less_p" ] && less_bn="less lessecho"
+bns="bash chmod chown cp date dd df echo fuser ip kbd_mode $less_bn \
+  loadkeys login lowntfs-3g ls lsblk mount mountpoint mv nc.openbsd \
+  ntfs-3g ntfs-3g.probe ntfsfix ntfsinfo ping ps readlink \
+  sed setfont ss su systemd-hwdb tar udevadm umount"
+
+for x in $bns; do ../copy-exec-with-shlibs /bin/$x . ; done
+
+## /sbin/ binary executables
+bns01="cfdisk fdisk sfdisk gdisk parted"
+bns02="fsck mke2fs e2fsck tune2fs resize2fs dump restore \
+  mkfs.fat mkexfatfs fatlabel exfatfsck fsck.fat mount.exfat-fuse \
+  mkntfs ntfsclone"
+bns03="cryptsetup dhclient dmsetup hdparm killall5 ldconfig losetup \
+  mkhomedir_helper pam_tally pam_tally2 start-stop-daemon sysctl \
+  unix_chkpwd unix_update fstab-decode iwconfig wpa_cli wpa_supplicant"
+bns="$bns01 $bns02 $bns03"
+
+for x in $bns; do ../copy-exec-with-shlibs /sbin/$x . ; done
+
+## /usr/bin/ binary executables
+[ -z "$less_bn" ] && less_ubn="less lessecho"
+[ -x /usr/bin/unrar-nonfree ] && unrar_bn="unrar-nonfree"
+bns="base64 bc ckbcomp cpufreq-info cpufreq-set dc diff dig dircolors \
+  dpkg dpkg-deb du file eject faked-sysv find getopt gpgv hexdump hexer \
+  host iperf $less_ubn lscpu lspci lsusb lzip.lzip mawk make openssl passwd \
+  perl pstree pv scp sftp ssh setvtrgb stress top tput tracepath \
+  traceroute6.iputils tset $unrar_bn uuidcdef vim.tiny volname wget xargs \
+  ${arch_prefix}-objdump  xz zstd"
+#	${arch_prefix}-readelf
+
+for x in $bns; do ../copy-exec-with-shlibs /usr/bin/$x . ; done
+
+## /usr/sbin/ binary executables
+bns="dmidecode ntpdate smartctl tcpdump"
+
+for x in $bns; do ../copy-exec-with-shlibs /usr/sbin/$x . ; done
+
+## other binaries
+../copy-exec-with-shlibs /lib/systemd/systemd-udevd .
+../copy-exec-with-shlibs /lib/${arch_triple}/security/pam_lastlog.so .
+../copy-exec-with-shlibs /lib/${arch_triple}/security/pam_unix.so .
+../copy-exec-with-shlibs /usr/lib/apg/apg .
+../copy-exec-with-shlibs /usr/lib/p7zip/7z .
+
+## manually copy shared libs
+find /lib/${arch_triple}/libnss_[cdf]* | cpio -pdm .
+find /lib/${arch_triple}/libpamc.* | cpio -pdm .
+find /lib/${arch_triple}/security | cpio -pdm .
+find /usr/lib/${arch_triple}/libfakeroot/libfakeroot-sysv.so | cpio -pdm .
+
+#== custom
+if [ -f /usr/bin/ftp-ssl ]; then
+  ../copy-exec-with-shlibs /usr/bin/ftp-ssl .
+  ln -s ftp-ssl usr/bin/ftp
+  ln -s ftp-ssl usr/bin/pftp
+elif  [ -f /usr/bin/netkit-ftp ]; then
+  ../copy-exec-with-shlibs /usr/bin/netkit-ftp .
+  ln -s netkit-ftp usr/bin/ftp
+  ln -s netkit-ftp usr/bin/pftp
+fi
+if [ -f /usr/bin/telnet-ssl ]; then
+  ../copy-exec-with-shlibs /usr/bin/telnet-ssl .
+  ln -s telnet-ssl usr/bin/telnet
+elif [ -f /usr/bin/telnet.netkit ]; then
+  ../copy-exec-with-shlibs /usr/bin/telnet.netkit .
+  ln -s telnet.netkit usr/bin/telnet
+fi
+
+## scripts
+echo /bin/setupcon | cpio -pdm .
+echo ${less_p}/bin/lesspipe | cpio -pdm .
+echo /usr/bin/7z | cpio -pdm .
+echo /usr/bin/apg | cpio -pdm .
+echo /usr/bin/fakeroot-sysv | cpio -pdm .
+echo /usr/bin/savelog | cpio -pdm .
+echo /usr/bin/ldd | cpio -pdm .
+echo /usr/bin/usb-devices | cpio -pdm .
+echo /sbin/blkdeactivate | cpio -pdm .
+echo /sbin/dhclient-script | cpio -pdm .
+#echo /sbin/ldconfig | cpio -pdm .
+echo /usr/sbin/debootstrap | cpio -pdm .
+echo /usr/sbin/service | cpio -pdm .
+echo /usr/sbin/invoke-rc.d | cpio -pdm .
+echo /usr/sbin/pam-auth-update | cpio -pdm .
+echo /usr/sbin/pam_getenv | cpio -pdm .
+find /lib/lsb | cpio -pdm .
+
+## symbolic links
+ln -s /bin/kmod bin/lsmod
+ln -s /bin/kmod sbin/depmod
+ln -s /bin/kmod sbin/insmod
+ln -s /bin/kmod sbin/lsmod
+ln -s /bin/kmod sbin/modinfo
+ln -s /bin/kmod sbin/modprobe
+ln -s /bin/kmod sbin/rmmod
+ln -s nc.openbsd bin/nc
+ln -s ping bin/ping4
+ln -s ping bin/ping6
+ln -s faked-sysv usr/bin/faked
+ln -s fakeroot-sysv usr/bin/fakeroot
+ln -s hexdump usr/bin/hd
+ln -s mawk usr/bin/awk
+ln -s tset usr/bin/reset
+ln -s traceroute6.iputils usr/bin/traceroute6
+ln -s vim.tiny usr/bin/vi
+ln -s vim.tiny usr/bin/view
+ln -s ${arch_prefix}-objdump usr/bin/objdump
+#ln -s ${arch_prefix}-readelf usr/bin/readelf
+ln -s lesspipe usr/bin/lessfile
+ln -s lzip.lzip usr/bin/lzip
+ln -s xz usr/bin/unxz
+ln -s xz usr/bin/xzcat
+ln -s zstd usr/bin/unzstd
+ln -s zstd usr/bin/zstdcat
+ln -s /bin/ip sbin/ip
+ln -s /bin/udevadm sbin/udevadm
+ln -s e2fsck sbin/fsck.ext2
+ln -s e2fsck sbin/fsck.ext3
+ln -s mke2fs sbin/mkfs.ext2
+ln -s mke2fs sbin/mkfs.ext3
+ln -s mke2fs sbin/mkfs.ext4
+ln -s exfatfsck sbin/fsck.exfat
+ln -s fsck.fat sbin/fsck.msdos
+ln -s fsck.fat sbin/fsck.vfat
+ln -s mkexfatfs sbin/mkfs.exfat
+ln -s mkfs.fat sbin/mkfs.msdos
+ln -s mkfs.fat sbin/mkfs.vfat
+ln -s mount.exfat-fuse sbin/mount.exfat
+ln -s mkntfs sbin/mkfs.ntfs
+ln -s /bin/lowntfs-3g sbin/mount.lowntfs-3g
+ln -s /bin/ntfs-3g sbin/mount.ntfs-3g
+ln -s mount.ntfs-3g sbin/mount.ntfs
+ln -s dmsetup sbin/dmstats
+[ -n "$unrar_bn" ] && ln -s unrar-nonfree usr/bin/unrar
+
+# update ld.so.cache
+ldconfig -r $(pwd)
+
+## data or setting
+find /lib/init | cpio -pdm .
+find /lib/terminfo | cpio -pdm .
+find /lib/console-setup | cpio -pdm .
+find /lib/udev | cpio -pdm .
+# customize
+rm -f usr/lib/udev/hdparm usr/lib/udev/ifupdown-hotplug \
+	usr/lib/udev/rules.d/73-usb-net-by-mac.rules \
+	usr/lib/udev/rules.d/80-ifupdown.rules \
+	usr/lib/udev/rules.d/85-hdparm.rules
+echo "#!/bin/sh" >usr/lib/systemd/systemd-sysctl
+echo "exit 0" >>usr/lib/systemd/systemd-sysctl
+chmod 755 usr/lib/systemd/systemd-sysctl
+mkdir -p usr/share/consolefonts
+ln -sf /etc/console-setup/cached_Uni2-Fixed16.psf.gz \
+	usr/share/consolefonts/Uni2-Fixed16.psf.gz
+find /usr/share/debootstrap | cpio -pdm .
+find /usr/share/keyrings/debian-archive-keyring.gpg | cpio -pdm .
+find /usr/share/file | cpio -pdm .
+find /usr/lib/file/magic.mgc | cpio -pdm .
+find /usr/lib/locale/C.UTF-8 | cpio -pdm .
+#find /usr/lib/locale/en_US.utf8 | cpio -pdm .
+echo /usr/share/locale/locale.alias | cpio -pdm .
+find /usr/share/vim/vim81/debian.vim | cpio -pdm .
+find /usr/share/vim/vimrc* | cpio -pdm .
+
+# for file command
+mkdir -m 0755 -p usr/share/misc
+ln -s ../file/magic usr/share/misc/magic
+ln -s ../file/magic.mgc usr/share/misc/magic.mgc
+
+# if copy from other place, ex. srcETC=/tmp/xxx/etc
+srcETC=/etc
+dstETC=$(pwd)/etc
+# copy etc files
+for x in `cat ../data/etc-list`;
+	do (cd "$srcETC"; find $x | cpio -pdmu $dstETC); done
+
+# for init
+fixETC="$srcETC"
+[ -d "$srcETC/rcS.d" -a -d "$srcETC/rc2.d" -a -d "$srcETC/rc6.d" ] \
+ || fixETC=/etc
+(cd "$fixETC"; find rcS.d rc2.d rc6.d | cpio -pdm $dstETC)
+
+find etc/rcS.d -type l -exec ../remove-dead-symlink {} \; -print
+find etc/rc2.d -type l -exec ../remove-dead-symlink {} \; -print
+find etc/rc6.d -type l -exec ../remove-dead-symlink {} \; -print
+
+# time zone
+rm -f etc/localtime
+if [ "$MINIDEB_TZ_JST" = "yes" -o "$MINIDEB_TZ_JST" = "y" ]; then
+        cp -p /usr/share/zoneinfo/Japan etc/localtime
+#elif
+#	... customize: add another time zone
+else
+        cp -p /usr/share/zoneinfo/UCT etc/localtime
+fi
+
+# for user account
+fixETC="$srcETC"
+[ -d "$srcETC/skel" ] || fixETC=/etc
+cp -a "$fixETC/skel" root
+rm -f root/[a-z]*
+cp -a root home/user
+chmod 0700 root
+chown -R 1000:1000 home/user
+
+# prepare var directory
+mkdir var/lib/dbus var/lib/dhcp var/lib/urandom var/lib/sudo
+mkdir var/log
+mkdir -p var/spool/rsyslog
+ln -s /run var/run
+ln -s /run/lock var/lock
+
+# temporary directory
+mkdir -m 1777 tmp
+
+tar xzvf ../data/etcfiles.tgz
+#		this /etc/adjtime set RTC to local time.
+
+echo "mini Debian (linux ${kv}) \\l" >etc/issue
+echo >>etc/issue
+
+../mangle-passwdgroup "$srcETC"
+
+#== You should customize here.
+#tar xzf ../data/special.tgz
+
+set +x
+echo
+echo "Next: tar cJf system.txz, you can add and/or change system files now."
+read -p "      Make sure system files, and then hit Enter. " reply
+echo
+set -x
+
+rm usr/*bin/busybox
+rm usr/lib/klibc-*.so  usr/lib/${arch_triple}/ld-2.*.so \
+	usr/lib/${arch_triple}/libc-2.*.so \
+	usr/lib/${arch_triple}/libresolv-2.*.so
+
+tar cJ --numeric-owner -f ../w1/system.txz [a-z]*
+set +x
+ls -l ../w1/system.txz
+

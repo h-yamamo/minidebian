@@ -1,0 +1,40 @@
+#!/bin/sh
+# From: /etc or $srcETC  To: w2/etc
+s_etc=$1
+# [ ! -z $1 ] && s_etc=$1/etc
+dest=etc
+temp=../xtract
+
+u1000=$(sed -ne "s|^\(.\+\):.*:1000:[0-9]\+:.*:.*:.*|\1|p" < $s_etc/passwd)
+g1000=$(sed -ne "s|^\(.\+\):.*:1000:.*|\1|p" < $s_etc/group)
+#echo $u1000/$g1000
+
+[ -d $temp ] || mkdir $temp
+tar xf ../data/etc-pw.tgz -C $temp
+#[ -d $dest ] || mkdir -p $dest
+
+grep -v -e "^user:" < $s_etc/passwd | grep -v -e "^${u1000}:" >$dest/passwd
+cat $temp/passwd.user >>$dest/passwd
+
+grep -v -e "^user:" < $s_etc/group | grep -v -e "^${g1000}:" >$dest/group
+cat $temp/group.user >>$dest/group
+
+cp -p $temp/shadow.root $dest/shadow
+if [ -n "$u1000" -a "user" != "$u1000" ]
+then
+    grep -v -e "^root:" < $s_etc/shadow | grep -v -e "^user:" | \
+	grep -v -e "^${u1000}:" >>$dest/shadow
+else
+    grep -v -e "^root:" < $s_etc/shadow | grep -v -e "^user:" >>$dest/shadow
+fi
+cat $temp/shadow.user >>$dest/shadow
+
+cp -p $s_etc/gshadow $dest/
+if [ -n "$g1000" -a "user" != "$g1000" ]
+then
+    grep -v -e "^user:" < $s_etc/gshadow | grep -v -e "^${g1000}:" >$dest/gshadow
+else
+    grep -v -e "^user:" < $s_etc/gshadow >$dest/gshadow
+fi
+cat $temp/gshadow.user >>$dest/gshadow
+

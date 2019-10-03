@@ -1,0 +1,44 @@
+## VGA
+
+# intel graphics
+i915/bxt_dmc_ver1_07.bin
+i915/bxt_guc_ver8_7.bin
+i915/kbl_dmc_ver1_04.bin
+i915/kbl_guc_ver9_39.bin
+i915/skl_dmc_ver1_27.bin
+i915/skl_guc_ver6_1.bin
+       
+# radeon
+!radeon/R100*
+!radeon/R600_r*
+!radeon/R780*
+!radeon/VERDE_*
+!radeon/TAHITI_u*
+
+# nvidia
+
+## Ethernet
+!3com
+cis
+!e100
+!tigon
+
+## Wifi BT
+# atheros
+# broadcom
+
+# iwlwifi
+; Thinkpad X61
+iwlwifi-4965-2.ucode
+; Thinkpad X230
+iwlwifi-6050-5.ucode
+; Thinkpad X240
+iwlwifi-7260-17.ucode
+; Thinkpad X250
+iwlwifi-7265D-29.ucode
+
+# ralink
+rt[23]*.bin
+
+# realtek
+

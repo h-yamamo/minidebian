@@ -1,0 +1,54 @@
+#!/bin/bash -e
+# Arguments
+# 1. Executable file
+# 2. New Root Path
+if test $# -lt 2; then
+echo "eg. $0  ExecutableFile(fullpath) NewRootPath"
+exit
+fi
+
+exitproc()
+{ rm -f ${TMPFILE}; }
+trap '
+exitproc
+exit 1
+' 2 15
+
+EXECFILE=$1
+NEWROOT=$2
+
+test -L "$EXECFILE" && echo "$EXECFILE is a symbolic link" && exit 1
+! test -e "$EXECFILE" && echo "$EXECFILE does not exist" && exit 1
+file "$EXECFILE"|grep -iq "shell script" && echo "$EXECFILE is a shell script" && exit 1
+
+TMPFILE=`mktemp`
+set +e
+ldd "$EXECFILE" > $TMPFILE
+RET=$?
+set -e
+[ $RET -gt 1 ] && exit $RET
+
+if ! test -d "$NEWROOT"; then
+echo "$NEWROOT does not exist"
+exit
+fi
+
+while read i
+ do
+ fpath="${i#*/*}"
+ if [ "$fpath" != "$i" ]; then
+	fpath="${fpath%% *}"
+	fpath="/${fpath}"
+	[ ! -e ${NEWROOT}${fpath} ] || continue
+	echo " += $fpath"
+	echo $fpath |cpio -pdm ${NEWROOT}
+	[ -L $fpath ] || continue
+	fpath=`realpath $fpath`
+	echo $fpath |cpio -pdm ${NEWROOT}
+ fi
+done<$TMPFILE
+
+#set -x
+echo "$EXECFILE"|cpio -pdm "$NEWROOT"
+#set +x
+exitproc
