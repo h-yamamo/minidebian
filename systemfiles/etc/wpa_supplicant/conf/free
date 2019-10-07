@@ -1,0 +1,26 @@
+ctrl_interface=DIR=/run/wpa_supplicant GROUP=root
+update_config=1
+network={
+	ssid="00000JAPAN"
+	key_mgmt=NONE
+}
+network={
+	ssid="00_MCD-FREE-WIFI"
+	key_mgmt=NONE
+}
+network={
+	ssid="at_STARBUCKS_Wi2"
+	key_mgmt=NONE
+}
+network={
+	ssid="Famima_Wi-Fi"
+	key_mgmt=NONE
+}
+network={
+	ssid="LAWSON_Free_Wi-Fi"
+	key_mgmt=NONE
+}
+network={
+	ssid="Wi2_free"
+	key_mgmt=NONE
+}

@@ -1,0 +1,31 @@
+#		<mp>		<type>	<opt>			<chk>	<n>
+#rootfs		/		tmpfs	defaults		0	0
+#swap dev/file	none		swap	sw			0	0
+
+/dev/sr0	/media/cd	udf,iso9660	noauto,user,ro	0	0
+/dev/mmcblk0p1	/media/m1	vfat	noauto,user,noatime,fmask=137,dmask=27,flush 0 0
+/dev/sda1	/media/u1	vfat	noauto,user,noatime,fmask=137,dmask=27,flush 0 0
+/dev/sdb1	/media/u2	vfat	noauto,user,noatime,fmask=137,dmask=27,flush 0 0
+/dev/sdc1	/media/u3	vfat	noauto,user,noatime,fmask=137,dmask=27,flush 0 0
+
+/dev/mmcblk0p1	/media/mmcblk0p1 auto	noauto,user,noatime	0	0
+/dev/mmcblk0p2	/media/mmcblk0p2 auto	noauto,user,noatime	0	0
+/dev/mmcblk0p3	/media/mmcblk0p3 auto	noauto,user,noatime	0	0
+/dev/mmcblk0p4	/media/mmcblk0p4 auto	noauto,user,noatime	0	0
+
+/dev/sda1	/media/sda1	auto	noauto,user,noatime	0	0
+/dev/sda2	/media/sda2	auto	noauto,user,noatime	0	0
+/dev/sda3	/media/sda3	auto	noauto,user,noatime	0	0
+/dev/sda4	/media/sda4	auto	noauto,user,noatime	0	0
+/dev/sda5	/media/sda5	auto	noauto,user,noatime	0	0
+/dev/sda6	/media/sda6	auto	noauto,user,noatime	0	0
+/dev/sda7	/media/sda7	auto	noauto,user,noatime	0	0
+/dev/sda8	/media/sda8	auto	noauto,user,noatime	0	0
+
+/dev/sdb1	/media/sdb1	auto	noauto,user,noatime	0	0
+/dev/sdb2	/media/sdb2	auto	noauto,user,noatime	0	0
+/dev/sdb3	/media/sdb3	auto	noauto,user,noatime	0	0
+/dev/sdb4	/media/sdb4	auto	noauto,user,noatime	0	0
+
+/dev/sdc1	/media/sdc1	auto	noauto,user,noatime	0	0
+

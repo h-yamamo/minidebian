@@ -1,0 +1,28 @@
+#!/bin/sh
+from_path=$1
+to_path=$2
+
+cd $from_path
+
+i_dirs=`find . -mindepth 1 -type d -not -regex '\./home.*'`
+
+i_files_x=`find . -type f -executable -not -regex '\./home.*'`
+
+i_files_r=`find . -type f -not -executable -not -regex '\./home.*'`
+
+i_files_l=`find . -type l -not -regex '\./home.*'`
+
+set -x
+for x in `echo $i_dirs`; do
+	[ -d $to_path/$x ] || mkdir $to_path/$x
+done
+for x in `echo $i_files_x`; do
+	install -o 0 -g 0 -m 755 -p $x $to_path/$x
+done
+for x in `echo $i_files_r`; do
+	install -o 0 -g 0 -m 644 -p $x $to_path/$x
+done
+for x in `echo $i_files_l`; do
+	ln -s `ls -l $x | sed -e 's/^.* -> \(.\+\)$/\1/'` $to_path/$x
+done
+

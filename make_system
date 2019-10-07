@@ -335,21 +335,25 @@ ln -s /run/lock var/lock
 # temporary directory
 mkdir -m 1777 tmp
 
-tar xzvf ../data/etcfiles.tgz
-#		this /etc/adjtime set RTC to local time.
+# copy system setting and conveniences
+# - to customize, change files/directories in systemfiles/ in advance
+../copy-distribution-files ../systemfiles $(pwd)
 
-echo "mini Debian (linux ${kv}) \\l" >etc/issue
-echo >>etc/issue
+# special
+chmod 700 etc/wpa_supplicant/conf
+install -o 1000 -g 1000 -m 644 -p \
+	../systemfiles/home/user/.bash*  home/user/
 
+# set account/password of 'root' and 'user'
 ../mangle-passwdgroup "$srcETC"
 
-#== You should customize here.
-#tar xzf ../data/special.tgz
+echo "mini Debian 10 (linux ${kv}) \\l" >etc/issue
+echo >>etc/issue
 
 set +x
 echo
 echo "Next: tar cJf system.txz, you can add and/or change system files now."
-read -p "      Make sure system files, and then hit Enter. " reply
+read -p "      Make sure system files in w2/, and then hit Enter. " reply
 echo
 set -x
 
