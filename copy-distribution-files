@@ -8,7 +8,8 @@ i_dirs=`find . -mindepth 1 -type d -not -regex '\./home.*'`
 
 i_files_x=`find . -type f -executable -not -regex '\./home.*'`
 
-i_files_r=`find . -type f -not -executable -not -regex '\./home.*'`
+i_files_r=`find . -type f -not -executable -not -regex '\./home.*' \
+			-not -name .gitignore`
 
 i_files_l=`find . -type l -not -regex '\./home.*'`
 
