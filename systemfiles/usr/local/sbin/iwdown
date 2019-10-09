@@ -1,0 +1,33 @@
+#!/bin/sh
+
+usage() {
+	echo "  Usage: iwdown [wlan-ifname]"
+	exit
+}
+
+if [ $# -gt 0 ]; then
+	if [ -e "/run/wpa_supplicant/$1" ]; then
+		wl_ifs="$1"
+	else
+		echo " not exist"
+		usage
+	fi
+else
+	wl_ifs=$(ls /run/wpa_supplicant/ 2>/dev/null | grep -E '^w')
+	if [ -z "$wl_ifs" ]; then
+		echo " no wlan interface"
+		exit 1
+	fi
+fi
+
+for w in `echo $wl_ifs`; do dhclient -r $w; done
+sleep 1
+
+for w in `echo $wl_ifs`; do wpa_cli -i $w terminate; done
+sleep 0.2
+
+for w in `echo $wl_ifs`; do ip link set dev $w down; done
+sleep 0.2
+
+for w in `echo $wl_ifs`; do iwconfig $w txpower off; done
+

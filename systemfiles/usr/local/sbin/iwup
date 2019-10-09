@@ -1,0 +1,101 @@
+#!/bin/sh
+
+usage() {
+	echo "  Usage: iwup conf-name [wlan-ifname]"
+	exit
+}
+
+[ $# -eq 0 ] && usage
+
+if [ ! -e "/etc/wpa_supplicant/conf/$1" ]; then
+	echo " not exist /etc/wpa_supplicant/conf/$1"
+	usage
+fi
+
+wl_ifs=$(ip addr show | \
+	 sed -ne 's/^[1-9][0-9]*: \(w.\+\): <.*BROADCAST.\+$/\1/p')
+
+if [ -z "$wl_ifs" ]; then
+	echo " no wlan interface"
+	exit
+fi
+
+if [ $# -ge 2 ]; then
+	echo $wl_ifs | grep -q -w "$2" && wlif="$2"
+	if [ -z $wlif ]; then
+		echo " not exist"
+		usage
+	fi
+else
+	wlif=$(echo $wl_ifs | cut -d ' ' -f 1)
+fi
+
+if [ ! -e "/etc/resolv.conf" ]; then
+	echo "#" >/etc/resolv.conf
+fi
+
+set -e
+iwconfig $wlif txpower auto
+sleep 0.2
+ip link set dev $wlif up
+set +e
+
+### need each AP
+wpa_supplicant -B -i $wlif -c /etc/wpa_supplicant/conf/$1
+echo -n " ."
+sleep 1; echo -n "."; sleep 1
+
+for i in 3 4 5 6 7 8; do \
+	wpa_cli -i $wlif status 2>/dev/null \
+	| grep -q "wpa_state=SCANNING";
+	if [ $? -eq 0 ]; then
+		echo -n "."
+		sleep 1
+	else
+		echo
+		break
+	fi
+	if [ $i -ge 8 ]; then
+		echo " not found AP."
+		echo -n "stopping wpa_supplicant .. "
+		wpa_cli -i $wlif terminate
+		ip link set dev $wlif down
+		iwconfig $wlif txpower off
+		exit
+	fi
+done
+
+wpa_cli -i $wlif status
+
+echo
+sleep 1
+read -p " Is it OK?  Do you want to execute dhclient next? (Y/n): " rp
+[ -z "$rp" ] && rp=Y
+case "$rp" in
+ Y|y|yes)
+	dhclient $wlif
+	sleep 0.5
+	echo
+	ip addr show dev $wlif
+	echo
+	ip route show
+	;;
+ *)
+	echo " do nothing."
+	;;
+esac
+
+exit
+
+# wpa_cli status
+# wpa_cli list_networks
+# wpa_cli select_network N / enable_network N / disable_network N
+# wpa_cli
+#   scan
+#   scan_results
+#   add_network
+#     set_network 0 ssid "xxxx"
+#     set_network 0 psk "pass" / set_network 0 key_mgmt NONE
+#     enable_network 0
+#   save_config
+#
