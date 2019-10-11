@@ -33,6 +33,8 @@ make prepare_package
 
 ### Create mini Debian initrd
 
+For Time-Zones other than Japan, comment out `export MINIDEB_TZ_JST=yes` in `main.sh` script in advance.
+
 ```
 make
 ```
