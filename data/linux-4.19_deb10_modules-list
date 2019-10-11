@@ -72,8 +72,8 @@ drivers/net/wireless/ralink/rt2*/*[bo].ko
 #drivers/net/wireless/realtek
 #drivers/platform/x86/thinkpad_acpi.ko
 drivers/pcmcia
-;drivers/pps/pps_core.ko
-drivers/ptp
+drivers/pps/pps_core.ko
+drivers/ptp/ptp.ko
 drivers/scsi/scsi_mod.ko
 drivers/scsi/sd_mod.ko
 drivers/scsi/sg.ko
