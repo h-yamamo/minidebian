@@ -305,6 +305,7 @@ fixETC="$srcETC"
 find etc/rcS.d -type l -exec ../remove-dead-symlink {} \; -print
 find etc/rc2.d -type l -exec ../remove-dead-symlink {} \; -print
 find etc/rc6.d -type l -exec ../remove-dead-symlink {} \; -print
+rm -f etc/rc*.d/README
 
 # time zone
 rm -f etc/localtime
