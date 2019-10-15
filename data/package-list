@@ -39,6 +39,7 @@ less
 locales
 lzip
 make
+#nano
 netcat-openbsd
 ntfs-3g
 ntpdate
@@ -50,6 +51,7 @@ perl
 procps
 psmisc
 pv
+rfkill
 smartmontools
 strace
 stress
@@ -59,6 +61,7 @@ telnet
 unrar
 usbutils
 uuidcdef
+vim-tiny
 wireless-tools
 wpasupplicant
 xz-utils
