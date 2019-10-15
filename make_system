@@ -132,7 +132,7 @@ bns01="cfdisk fdisk sfdisk gdisk parted"
 bns02="fsck mke2fs e2fsck tune2fs resize2fs dump restore \
   mkfs.fat mkexfatfs fatlabel exfatfsck fsck.fat mount.exfat-fuse \
   mkntfs ntfsclone"
-bns03="cryptsetup dhclient dmsetup hdparm killall5 ldconfig losetup \
+bns03="cryptsetup dhclient dmsetup hdparm iw killall5 ldconfig losetup \
   mkhomedir_helper pam_tally pam_tally2 start-stop-daemon sysctl \
   unix_chkpwd unix_update fstab-decode iwconfig wpa_cli wpa_supplicant"
 bns="$bns01 $bns02 $bns03"
@@ -153,7 +153,7 @@ bns="base64 bc ckbcomp cpufreq-info cpufreq-set dc diff dig dircolors \
 for x in $bns; do ../copy-exec-with-shlibs /usr/bin/$x . ; done
 
 ## /usr/sbin/ binary executables
-bns="dmidecode ntpdate smartctl tcpdump"
+bns="dmidecode ntpdate rfkill smartctl tcpdump"
 
 for x in $bns; do ../copy-exec-with-shlibs /usr/sbin/$x . ; done
 

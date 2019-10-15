@@ -107,6 +107,7 @@ insmod -> /bin/kmod
 invoke-rc.d
 ip -> /bin/ip
 ipneigh -> busybox
+iw
 iwconfig
 killall5
 klogd -> busybox
@@ -154,6 +155,7 @@ rdate -> busybox
 reboot -> busybox
 resize2fs
 restore
+rfkill
 rmmod -> /bin/kmod
 route -> busybox
 service
