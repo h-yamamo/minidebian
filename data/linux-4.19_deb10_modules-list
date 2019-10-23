@@ -72,6 +72,9 @@ drivers/net/wireless/ralink/rt2*/*[bo].ko
 #drivers/net/wireless/realtek
 #drivers/platform/x86/thinkpad_acpi.ko
 drivers/pcmcia
+;---------------------- amd64   i386
+; CONFIG_PPS=y                  m
+; CONFIG_PTP_1588_CLOCK=y       m
 drivers/pps/pps_core.ko
 drivers/ptp/ptp.ko
 drivers/scsi/scsi_mod.ko
@@ -85,6 +88,13 @@ drivers/usb/host/[eox]*.ko
 drivers/usb/host/uhci-hcd.ko
 drivers/usb/serial/[cpu][lps]*.ko
 drivers/usb/storage/u[as]*.ko
+;----------------------- amd64  i386(686-pae) i386(686)non-PAE
+; CONFIG_FB_SYS_FILLRECT=y      y             m
+; CONFIG_FB_SYS_COPYAREA=y      y             m
+; CONFIG_FB_SYS_IMAGEBLIT=y     y             m
+; CONFIG_FB_SYS_FOPS=y          y             m
+drivers/video/fbdev/core/fb_sys_fops.ko
+drivers/video/fbdev/core/sys*.ko
 fs/[bm]*.ko
 #fs/btrfs
 #fs/cifs

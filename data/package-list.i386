@@ -1,1 +1,3 @@
 linux-image-686-pae
+; Recommended for memory < 1GB  # Required for 256MB
+#linux-image-686
