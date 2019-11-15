@@ -1,8 +1,6 @@
 bash.bashrc
 console-setup/cached_UTF-8_del.kmap.gz
-console-setup/cached_Uni2-Fixed16.psf.gz
-console-setup/cached_setup_font.sh
-console-setup/cached_setup_keyboard.sh
+console-setup/cached_setup_*
 default/devpts
 default/halt
 default/keyboard
