@@ -76,7 +76,7 @@ iw dev $wlif scan | while read -r line; do
    1)
     if echo "$line" | grep -q -E '^[[:space:]]+capability: '
     then
-      if echo "$line" |  grep -q -i -w Privacy; then
+      if echo "$line" | grep -q -i -w Privacy; then
         w_encr=8
       else
         w_encr=0
@@ -132,7 +132,7 @@ iw dev $wlif scan | while read -r line; do
    6)
     if echo "$line" | grep -q -E '^[[:space:]]+\* Authentication suites: '
     then
-      if echo "$line" |  grep -q -w SAE; then
+      if echo "$line" | grep -q -w SAE; then
         w_encr=3
       else
         w_encr=2
