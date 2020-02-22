@@ -47,6 +47,7 @@ drivers/md/linear.ko
 drivers/md/md-mod.ko
 drivers/md/multipath.ko
 drivers/md/raid1.ko
+drivers/mfd/mfd-core.ko
 drivers/misc/cardreader/rtsx_pci.ko
 ;drivers/mmc/card/mmc_block.ko
 drivers/mmc/core/mmc_*.ko
