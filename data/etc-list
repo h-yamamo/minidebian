@@ -48,7 +48,6 @@ securetty
 security
 services
 shells
-ssh/moduli
 ssh/ssh_config
 ssl/certs
 ssl/openssl.cnf

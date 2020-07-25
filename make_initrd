@@ -30,8 +30,7 @@ set -x
       ../sbin/hwclock ../sbin/reboot ../sbin/run-init \
 	| cpio -pdm ../../../../w1/bin/)
 (cd w0/main/usr/sbin/;
- find blkid e2fsck fsck fsck.ext4 logsave modprobe \
-	| cpio -pdm ../../../../w1/sbin/)
+ find blkid modprobe | cpio -pdm ../../../../w1/sbin/)
 
 (cd w0/main/usr/lib/;
  find klibc-*.so ld-linux*.so* | cpio -pdm ../../../../w1/lib/)
