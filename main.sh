@@ -2,9 +2,15 @@
 [ $(id -u) -ne 0 ]  && echo "Run as root!" && exit 1
 umask 022
 
-# whether the RTC is UTC or Local is determined by /etc/adjtime
-# default Time Zone is UTC
-export MINIDEB_TZ_JST=yes
+# Whether rtc is utc or local is copied from the base system by default.
+# If you want to force overwrite, uncomment one of the following two lines.
+#export MINIDEB_RTC=local
+#export MINIDEB_RTC=utc
+
+# The Time Zone setting is copied from the base system by default.
+# If you want to force overwrite, uncomment the following export line.
+#	(Japan Standard Time)
+#export MINIDEB_TZ_JST=yes
 
 # kernel version
 kvs=$(ls /boot/vmlinuz* | \
@@ -49,5 +55,6 @@ mkdir w1 w2
 # Make the initrd.
 ./make_initrd $kv
 
+unset MINIDEB_RTC
 unset MINIDEB_TZ_JST
 

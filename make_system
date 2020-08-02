@@ -311,14 +311,33 @@ find etc/rc2.d -type l -exec ../remove-dead-symlink {} \; -print
 find etc/rc6.d -type l -exec ../remove-dead-symlink {} \; -print
 rm -f etc/rc*.d/README
 
+if [ "$MINIDEB_RTC" = "local" ]; then
+	rtc_local=yes
+elif [ "$MINIDEB_RTC" = "utc" ]; then
+	rtc_local=no
+elif [ -e /etc/adjtime ]; then
+	if [ $(wc -l /etc/adjtime | cut -d' ' -f1) -eq 3 ]; then
+		if [ "$(tail -1 /etc/adjtime)" = "LOCAL" ]; then
+			rtc_local=yes
+		fi
+	fi
+fi
+if [ "$rtc_local" = "yes" ]; then
+	printf "0.0 0 0.0\n0\nLOCAL\n" > etc/adjtime
+fi
+
 # time zone
-rm -f etc/localtime
-if [ "$MINIDEB_TZ_JST" = "yes" -o "$MINIDEB_TZ_JST" = "y" ]; then
-        cp -p /usr/share/zoneinfo/Japan etc/localtime
+if [ "$MINIDEB_TZ_JST" = "yes" ]; then
+	cp -p /usr/share/zoneinfo/Japan etc/localtime
 #elif
 #	... customize: add another time zone
 else
-        cp -p /usr/share/zoneinfo/UCT etc/localtime
+	[ -e /etc/localtime ] && lctm=$(realpath /etc/localtime)
+	if [ -n "$lctm" ]; then
+		cp -p "$lctm" etc/localtime
+	else
+		cp -p /usr/share/zoneinfo/UCT etc/localtime
+	fi
 fi
 
 # for user account

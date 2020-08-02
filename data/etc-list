@@ -28,7 +28,6 @@ init.d/udev
 init.d/umount*
 init.d/urandom
 locale.alias
-localtime
 login.defs
 mke2fs.conf
 mtab
