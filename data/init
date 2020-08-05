@@ -269,6 +269,12 @@ maybe_break bottom
 # Move /run to the root
 mount -n -o move /run ${rootmnt}/run
 
+# system working
+mkdir -m 0755 ${rootmnt}/run/lock
+mkdir -m 0755 ${rootmnt}/dev/shm
+mount -t tmpfs -o nosuid,nodev,noexec,size=5120k,mode=1777 tmpfs ${rootmnt}/run/lock
+mount -t tmpfs -o nosuid,nodev,noexec,size=20%,mode=1777 tmpfs ${rootmnt}/dev/shm
+
 validate_init() {
 	run-init -n "${rootmnt}" "${1}"
 }
