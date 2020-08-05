@@ -46,10 +46,6 @@ set -x
   (cd w0/main/usr/libx32/;
 	find ld-linux-*.so* | cpio -pdm ../../../../w1/libx32/)
 
-[ "$MINIDEB_TZ_JST" = "yes" -o "$MINIDEB_TZ_JST" = "y" ] && \
-	cp -p /usr/share/zoneinfo/Japan w1/etc/localtime
-# ... another time zone
-
 cd w1
 
 ldconfig -r $(pwd)
