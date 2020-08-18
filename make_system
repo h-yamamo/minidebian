@@ -315,9 +315,9 @@ if [ "$MINIDEB_RTC" = "local" ]; then
 	rtc_local=yes
 elif [ "$MINIDEB_RTC" = "utc" ]; then
 	rtc_local=no
-elif [ -e /etc/adjtime ]; then
-	if [ $(wc -l /etc/adjtime | cut -d' ' -f1) -eq 3 ]; then
-		if [ "$(tail -1 /etc/adjtime)" = "LOCAL" ]; then
+elif [ -e "$srcETC/adjtime" ]; then
+	if [ $(wc -l "$srcETC/adjtime" | cut -d ' ' -f 1) -eq 3 ]; then
+		if [ "$(tail -1 "$srcETC/adjtime")" = "LOCAL" ]; then
 			rtc_local=yes
 		fi
 	fi
@@ -334,7 +334,7 @@ if [ "$MINIDEB_TZ_JST" = "yes" ]; then
 #elif
 #	... customize: add another time zone
 else
-	[ -e /etc/localtime ] && lctm=$(realpath /etc/localtime)
+	[ -e "$srcETC/localtime" ] && lctm=$(realpath "$srcETC/localtime")
 	if [ -n "$lctm" ]; then
 		cp -p "$lctm" etc/localtime
 	else
