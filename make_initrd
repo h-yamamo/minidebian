@@ -26,7 +26,7 @@ set -x
 	| cpio -pdm ../../w1/)
 (cd w0/main/usr/bin/;
  find [ [[ ash busybox cat chvt cp echo ipconfig kmod ln ls mkdir mount \
-      printf rm sed setsid sh sleep tar test true xz \
+      nuke printf rm sed setsid sh sleep tar test true xz \
       ../sbin/hwclock ../sbin/reboot ../sbin/run-init \
 	| cpio -pdm ../../../../w1/bin/)
 (cd w0/main/usr/sbin/;

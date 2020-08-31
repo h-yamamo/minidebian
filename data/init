@@ -33,7 +33,7 @@ export quiet
 
 # Note that this only becomes /dev on the real filesystem if udev's scripts
 # are used; which they will be, but it's worth pointing out
-mount -t devtmpfs -o nosuid,size=8000k,mode=0755 udev /dev
+mount -t devtmpfs -o nosuid,mode=0755 udev /dev
 mkdir /dev/pts
 mount -t devpts -o noexec,nosuid,gid=5,mode=0620 devpts /dev/pts || true
 
@@ -205,7 +205,7 @@ maybe_break premount
 
 echo -n "Mounting root file system ... "
 # mkdir ${rootmnt}
-mount -t tmpfs -o defaults,size=${ROOTFSSIZE:-92%} rootfs ${rootmnt}
+mount -t tmpfs -o "size=${ROOTFSSIZE:-92%},mode=0755" rootfs ${rootmnt}
 xz -d -c system.txz | tar xf - -C ${rootmnt}
 rm system.txz
 
@@ -250,7 +250,6 @@ fi
 
 # Don't do log messages here to avoid confusing graphical boots
 ##;run_scripts /scripts/init-top
-mount -o rbind /dev ${rootmnt}/dev
 
 maybe_break modules
 [ "$quiet" != "y" ] && log_begin_msg "Loading essential drivers"
@@ -266,7 +265,10 @@ maybe_break bottom
 ##;[ "$quiet" != "y" ] && log_begin_msg "Running /scripts/init-bottom"
 ##;[ "$quiet" != "y" ] && log_end_msg
 
-# Move /run to the root
+# Move /dev, /run to the next root
+mount -n -o move /dev ${rootmnt}/dev
+nuke /dev
+ln -sf ${rootmnt}/dev /dev
 mount -n -o move /run ${rootmnt}/run
 
 # system working
