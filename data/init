@@ -33,7 +33,7 @@ export quiet
 
 # Note that this only becomes /dev on the real filesystem if udev's scripts
 # are used; which they will be, but it's worth pointing out
-mount -t devtmpfs -o nosuid,mode=0755 udev /dev
+mount -t devtmpfs -o noexec,nosuid,mode=0755 udev /dev
 mkdir /dev/pts
 mount -t devpts -o noexec,nosuid,gid=5,mode=0620 devpts /dev/pts || true
 
@@ -238,8 +238,8 @@ else
 	resume=${RESUME:-}
 fi
 
-mount -t tmpfs -o "noexec,nosuid,size=${RUNSIZE:-10%},mode=0755" tmpfs /run
-mkdir -m 0755 /run/initramfs
+mount -t tmpfs -o "nodev,noexec,nosuid,size=${RUNSIZE:-10%},mode=0755" tmpfs /run
+mkdir -m 0700 /run/initramfs
 
 if [ -n "$log_output" ]; then
 	exec >$log_output 2>&1
@@ -258,7 +258,7 @@ load_modules
 [ "$quiet" != "y" ] && log_end_msg
 
 if [ "$ROOTDELAY" ]; then
-	sleep $ROOTDELAY
+	sleep "$ROOTDELAY"
 fi
 
 maybe_break bottom

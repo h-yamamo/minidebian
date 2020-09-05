@@ -3,10 +3,10 @@
 #swap dev/file	none		swap	sw			0	0
 
 /dev/sr0	/media/cd	udf,iso9660	noauto,user,ro	0	0
-/dev/mmcblk0p1	/media/m1	vfat	noauto,user,noatime,fmask=137,dmask=27,flush 0 0
-/dev/sda1	/media/u1	vfat	noauto,user,noatime,fmask=137,dmask=27,flush 0 0
-/dev/sdb1	/media/u2	vfat	noauto,user,noatime,fmask=137,dmask=27,flush 0 0
-/dev/sdc1	/media/u3	vfat	noauto,user,noatime,fmask=137,dmask=27,flush 0 0
+/dev/mmcblk0p1	/media/m1	exfat,vfat	noauto,user,noatime,fmask=137,dmask=27 0 0
+/dev/sda1	/media/u1	exfat,vfat	noauto,user,noatime,fmask=137,dmask=27 0 0
+/dev/sdb1	/media/u2	exfat,vfat	noauto,user,noatime,fmask=137,dmask=27 0 0
+/dev/sdc1	/media/u3	exfat,vfat	noauto,user,noatime,fmask=137,dmask=27 0 0
 
 /dev/mmcblk0p1	/media/mmcblk0p1 auto	noauto,user,noatime	0	0
 /dev/mmcblk0p2	/media/mmcblk0p2 auto	noauto,user,noatime	0	0

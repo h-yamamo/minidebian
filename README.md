@@ -10,7 +10,7 @@ It is a small system for maintenance and rescue, and its size is about 50 MBytes
 - The /sbin/init adopts busybox init.
 - Merged /usr.
 - This system is created by copying system files from the base system.
-- Debian 10 "Buster" is supported as a base system.
+- Debian 11 "Bullseye" is supported as a base system.
 
 ## Requirements of machine to operating
 
@@ -42,7 +42,7 @@ make
 
 ### Copy kernel and the initrd
 
-- Copy `/boot/vmlinuz-4.19.0-N-XXX` and `initrd.img-minideb-4.19.0-N-XXX` to target.
+- Copy `/boot/vmlinuz-5.7.0-N-XXX` and `initrd.img-minideb-5.7.0-N-XXX` to target.
 - Enable booting with `grub` or `syslinux`.
 - No kernel boot option required.
 
@@ -82,12 +82,11 @@ dmsetup
 dmstats -> dmsetup
 dump
 e2fsck
-exfatfsck
 fatlabel
 fdisk
 freeramdisk -> busybox
 fsck
-fsck.exfat -> exfatfsck
+fsck.exfat
 fsck.ext2 -> e2fsck
 fsck.ext3 -> e2fsck
 fsck.fat
@@ -122,8 +121,7 @@ losetup
 lsmod -> /bin/kmod
 mkdosfs -> busybox
 mke2fs
-mkexfatfs
-mkfs.exfat -> mkexfatfs
+mkfs.exfat
 mkfs.ext2 -> mke2fs
 mkfs.ext3 -> mke2fs
 mkfs.ext4 -> mke2fs
@@ -136,8 +134,6 @@ mkntfs
 mkswap -> busybox
 modinfo -> /bin/kmod
 modprobe -> /bin/kmod
-mount.exfat -> mount.exfat-fuse
-mount.exfat-fuse
 mount.lowntfs-3g -> /bin/lowntfs-3g
 mount.ntfs -> mount.ntfs-3g
 mount.ntfs-3g -> /bin/ntfs-3g
@@ -169,8 +165,8 @@ switch_root -> busybox
 sysctl
 syslogd -> busybox
 tcpdump
+tune.exfat
 tune2fs
-udevadm -> /bin/udevadm
 udhcpc -> busybox
 udhcpd -> busybox
 unix_chkpwd
@@ -352,7 +348,7 @@ rm -> busybox
 rmdir -> busybox
 rpm -> busybox
 rpm2cpio -> busybox
-run-parts -> busybox
+run-parts
 savelog
 scp
 sed
@@ -427,7 +423,6 @@ uuidcdef
 vi -> vim.tiny
 view -> vim.tiny
 vim.tiny
-volname
 w -> busybox
 watch -> busybox
 wc -> busybox

@@ -1,9 +1,12 @@
 arch/x86/crypto/aes*.ko
 arch/x86/crypto/crc[3t]*.ko
 arch/x86/crypto/glue_helper.ko
+block/t10-pi.ko
+crypto/aes_generic.ko
 crypto/a[bflr]*.ko
 crypto/c[bcm]*.ko
 crypto/crc3*.ko
+crypto/crct10dif_*.ko
 crypto/cryptd.ko
 crypto/crypto_simd.ko
 crypto/ctr.ko
@@ -17,7 +20,7 @@ drivers/acpi/ac.ko
 drivers/acpi/battery.ko
 drivers/acpi/button.ko
 drivers/acpi/fan.ko
-drivers/acpi/thermal.ko
+#y)drivers/acpi/thermal.ko
 drivers/acpi/video.ko
 drivers/ata/ata_*.ko
 drivers/ata/*ahci.ko
@@ -29,8 +32,9 @@ drivers/char/raw.ko
 drivers/char/hw_random/rng-core.ko
 drivers/cpufreq
 drivers/gpu/drm/cirrus
-drivers/gpu/drm/drm*.ko
-drivers/gpu/drm/i915
+drivers/gpu/drm/drm.ko
+drivers/gpu/drm/drm_kms_helper.ko
+drivers/gpu/drm/i915/i915.ko
 drivers/gpu/drm/radeon
 drivers/gpu/drm/ttm
 drivers/hid/hid.ko
@@ -47,6 +51,7 @@ drivers/md/linear.ko
 drivers/md/md-mod.ko
 drivers/md/multipath.ko
 drivers/md/raid1.ko
+drivers/media/cec
 drivers/mfd/mfd-core.ko
 drivers/misc/cardreader/rtsx_pci.ko
 ;drivers/mmc/card/mmc_block.ko
@@ -73,9 +78,6 @@ drivers/net/wireless/ralink/rt2*/*[bo].ko
 #drivers/net/wireless/realtek
 #drivers/platform/x86/thinkpad_acpi.ko
 drivers/pcmcia
-;---------------------- amd64   i386
-; CONFIG_PPS=y                  m
-; CONFIG_PTP_1588_CLOCK=y       m
 drivers/pps/pps_core.ko
 drivers/ptp/ptp.ko
 drivers/scsi/scsi_mod.ko
@@ -99,12 +101,13 @@ drivers/video/fbdev/core/sys*.ko
 fs/[bm]*.ko
 #fs/btrfs
 #fs/cifs
-fs/crypto
+#y)fs/crypto
+fs/exfat
 fs/ext4
 #fs/f2fs
 fs/fat
 fs/fscache
-fs/fuse
+fs/fuse/fuse.ko
 fs/isofs
 fs/jbd2
 #fs/lockd
@@ -120,7 +123,10 @@ fs/nls/nls_utf8.ko
 #fs/overlayfs
 #fs/squashfs
 fs/udf
-lib/*crc*.ko
+lib/crc-*.ko
+lib/*crc[138]*.ko
+lib/crypto/liba*.ko
+lib/math
 #lib/zlib_deflate
 #net/bridge/netfilter
 #net/ipv4/netfilter

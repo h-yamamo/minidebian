@@ -28,7 +28,8 @@ set -x
 # dest: w2/ second stage in initrd
 cp -a w0/main/run w2/
 (cd w2; cp -a run media; cp -a run mnt; cp -a run proc; cp -a run sys;
- mkdir -p dev etc home usr/bin usr/lib/${arch_triple} usr/sbin var/lib;
+ mkdir -p dev etc home usr/bin usr/lib/${arch_triple} usr/lib/systemd \
+	  usr/sbin var/lib;
 	ln -s usr/bin bin;
 	ln -s usr/lib lib;
 	ln -s usr/sbin sbin)
@@ -65,7 +66,7 @@ bbx_bin="[ [[ ar arch ash basename bunzip2 bzcat bzip2 cal cat chgrp chvt \
   id ionice ipcalc kill killall last link ln logger logname lsscsi \
   lzcat lzma lzop md5sum microcom mkdir mkfifo mknod mkpasswd mktemp more mt \
   netstat nl nproc nslookup od openvt paste patch pidof printf pwd realpath \
-  renice rev rm rmdir rpm rpm2cpio run-parts seq setkeycodes setpriv setsid \
+  renice rev rm rmdir rpm rpm2cpio seq setkeycodes setpriv setsid \
   sh sha1sum sha256sum sha512sum shred sleep sort ssl_client stat strings \
   stty sync tac tail taskset tee test tftp time timeout touch tr traceroute \
   true truncate tty uname uncompress unexpand uniq unix2dos unlink unlzma \
@@ -85,7 +86,7 @@ bbx_sbin="acpid adjtimex arp arping blockdev blkdiscard brctl chroot \
 
 ## Collect the required kernel modules
 
-mods=`grep -E '^[a-z]' data/linux-4.19_deb10_modules-list`
+mods=`grep -E '^[a-z]' data/linux-5.7_deb11_modules-list`
 cd w2
 
 for x in $mods; do find /lib/modules/${kv}/kernel/$x | cpio -pdm . ; done
@@ -122,7 +123,7 @@ dpkg -L less | grep lessecho | grep bin | grep usr && less_p="/usr"
 [ -z "$less_p" ] && less_bn="less lessecho"
 bns="bash chmod chown cp date dd df echo fuser ip kbd_mode $less_bn \
   loadkeys login lowntfs-3g ls lsblk mount mountpoint mv nc.openbsd \
-  ntfs-3g ntfs-3g.probe ntfsfix ntfsinfo ping ps readlink \
+  ntfs-3g ntfs-3g.probe ntfsfix ntfsinfo ping ps readlink run-parts \
   sed setfont ss su systemd-hwdb tar udevadm umount"
 
 for x in $bns; do ../copy-exec-with-shlibs /bin/$x . ; done
@@ -130,8 +131,7 @@ for x in $bns; do ../copy-exec-with-shlibs /bin/$x . ; done
 ## /sbin/ binary executables
 bns01="cfdisk fdisk sfdisk gdisk parted"
 bns02="fsck mke2fs e2fsck tune2fs resize2fs dump restore \
-  mkfs.fat mkexfatfs fatlabel exfatfsck fsck.fat mount.exfat-fuse \
-  mkntfs ntfsclone"
+  mkfs.fat fatlabel fsck.fat mkntfs ntfsclone"
 bns03="cryptsetup dhclient dmsetup hdparm iw killall5 ldconfig losetup \
   mkhomedir_helper pam_tally pam_tally2 start-stop-daemon sysctl \
   unix_chkpwd unix_update fstab-decode iwconfig wpa_cli wpa_supplicant"
@@ -146,19 +146,19 @@ bns="base64 bc ckbcomp cpufreq-info cpufreq-set dc diff dig dircolors \
   dpkg dpkg-deb du file eject faked-sysv find getopt gpgv hexdump hexer \
   host iperf $less_ubn lscpu lspci lsusb lzip.lzip mawk make openssl passwd \
   perl pstree pv scp sftp ssh setvtrgb stress top tput tracepath \
-  traceroute6.iputils tset $unrar_bn uuidcdef vim.tiny volname wget xargs \
+  traceroute6.iputils tset $unrar_bn uuidcdef vim.tiny wget xargs \
   ${arch_prefix}-objdump  xz zstd"
 #	${arch_prefix}-readelf
 
 for x in $bns; do ../copy-exec-with-shlibs /usr/bin/$x . ; done
 
 ## /usr/sbin/ binary executables
-bns="dmidecode ntpdate rfkill smartctl tcpdump"
+bns="dmidecode fsck.exfat mkfs.exfat ntpdate rfkill smartctl tcpdump \
+  tune.exfat"
 
 for x in $bns; do ../copy-exec-with-shlibs /usr/sbin/$x . ; done
 
 ## other binaries
-../copy-exec-with-shlibs /lib/systemd/systemd-udevd .
 ../copy-exec-with-shlibs /lib/${arch_triple}/security/pam_lastlog.so .
 ../copy-exec-with-shlibs /lib/${arch_triple}/security/pam_unix.so .
 ../copy-exec-with-shlibs /usr/lib/apg/apg .
@@ -205,7 +205,7 @@ echo /usr/sbin/service | cpio -pdm .
 echo /usr/sbin/invoke-rc.d | cpio -pdm .
 echo /usr/sbin/pam-auth-update | cpio -pdm .
 echo /usr/sbin/pam_getenv | cpio -pdm .
-find /lib/lsb/init-functions /lib/lsb/init-functions.d/20-left-info-blocks \
+find /lib/lsb/init-functions /lib/lsb/init-functions.d/00-verbose \
 	| cpio -pdm .
 
 ## symbolic links
@@ -216,6 +216,7 @@ ln -s /bin/kmod sbin/lsmod
 ln -s /bin/kmod sbin/modinfo
 ln -s /bin/kmod sbin/modprobe
 ln -s /bin/kmod sbin/rmmod
+ln -s /bin/udevadm lib/systemd/systemd-udevd
 ln -s nc.openbsd bin/nc
 ln -s ping bin/ping4
 ln -s ping bin/ping6
@@ -236,19 +237,15 @@ ln -s xz usr/bin/xzcat
 ln -s zstd usr/bin/unzstd
 ln -s zstd usr/bin/zstdcat
 ln -s /bin/ip sbin/ip
-ln -s /bin/udevadm sbin/udevadm
 ln -s e2fsck sbin/fsck.ext2
 ln -s e2fsck sbin/fsck.ext3
 ln -s mke2fs sbin/mkfs.ext2
 ln -s mke2fs sbin/mkfs.ext3
 ln -s mke2fs sbin/mkfs.ext4
-ln -s exfatfsck sbin/fsck.exfat
 ln -s fsck.fat sbin/fsck.msdos
 ln -s fsck.fat sbin/fsck.vfat
-ln -s mkexfatfs sbin/mkfs.exfat
 ln -s mkfs.fat sbin/mkfs.msdos
 ln -s mkfs.fat sbin/mkfs.vfat
-ln -s mount.exfat-fuse sbin/mount.exfat
 ln -s mkntfs sbin/mkfs.ntfs
 ln -s /bin/lowntfs-3g sbin/mount.lowntfs-3g
 ln -s /bin/ntfs-3g sbin/mount.ntfs-3g
@@ -285,7 +282,7 @@ find /usr/lib/file/magic.mgc | cpio -pdm .
 find /usr/lib/locale/C.UTF-8 | cpio -pdm .
 #find /usr/lib/locale/en_US.utf8 | cpio -pdm .
 echo /usr/share/locale/locale.alias | cpio -pdm .
-find /usr/share/vim/vim81/debian.vim | cpio -pdm .
+find /usr/share/vim/vim82/debian.vim | cpio -pdm .
 find /usr/share/vim/vimrc* | cpio -pdm .
 
 # for file command
@@ -330,7 +327,7 @@ fi
 
 # time zone
 if [ "$MINIDEB_TZ_JST" = "yes" ]; then
-	cp -p /usr/share/zoneinfo/Japan etc/localtime
+	cp -p /usr/share/zoneinfo/Asia/Tokyo etc/localtime
 #elif
 #	... customize: add another time zone
 else
@@ -338,7 +335,7 @@ else
 	if [ -n "$lctm" ]; then
 		cp -p "$lctm" etc/localtime
 	else
-		cp -p /usr/share/zoneinfo/UCT etc/localtime
+		cp -p /usr/share/zoneinfo/Etc/UTC etc/localtime
 	fi
 fi
 
@@ -373,7 +370,7 @@ install -o 1000 -g 1000 -m 644 -p \
 # set account/password of 'root' and 'user'
 ../mangle-passwdgroup "$srcETC"
 
-echo "mini Debian 10 (linux ${kv}) \\l" >etc/issue
+echo "mini Debian 11 (linux ${kv}) \\l" >etc/issue
 echo >>etc/issue
 
 set +x

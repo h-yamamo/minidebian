@@ -30,7 +30,6 @@ init.d/urandom
 locale.alias
 login.defs
 mke2fs.conf
-mtab
 nsswitch.conf
 pam.d/ch*
 pam.d/common-*
@@ -43,7 +42,6 @@ pam.d/sudo
 profile
 protocols
 rpc
-securetty
 security
 services
 shells

@@ -1,0 +1,40 @@
+# /etc/securetty: list of terminals on which root is allowed to login.
+# See securetty(5) and login(1).
+
+console
+
+# Virtual consoles
+tty1
+tty2
+tty3
+tty4
+tty5
+tty6
+tty7
+
+# UART serial ports
+ttyS0
+ttyS1
+ttyS2
+ttyS3
+
+# USB dongles
+ttyUSB0
+ttyUSB1
+ttyUSB2
+
+# ARM "AMBA" serial ports
+ttyAM0
+ttyAM1
+ttyAM2
+ttyAM3
+
+# Embedded ARM AMBA PL011 ports (e.g. emulated by QEMU)
+ttyAMA0
+ttyAMA1
+
+# ODROID XU4 serial console
+ttySAC0
+ttySAC1
+ttySAC2
+ttySAC3

@@ -15,8 +15,7 @@ dnsutils
 dosfstools
 dump
 eject
-exfat-fuse
-exfat-utils
+exfatprogs
 fakeroot
 file
 firmware-linux-free
@@ -39,7 +38,6 @@ less
 locales
 lzip
 make
-#nano
 netcat-openbsd
 ntfs-3g
 ntpdate
