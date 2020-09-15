@@ -31,11 +31,11 @@ drivers/cdrom
 drivers/char/raw.ko
 drivers/char/hw_random/rng-core.ko
 drivers/cpufreq
-drivers/gpu/drm/cirrus
 drivers/gpu/drm/drm.ko
 drivers/gpu/drm/drm_kms_helper.ko
 drivers/gpu/drm/i915/i915.ko
 drivers/gpu/drm/radeon
+drivers/gpu/drm/tiny/cirrus.ko
 drivers/gpu/drm/ttm
 drivers/hid/hid.ko
 drivers/hid/hid-generic.ko
@@ -51,10 +51,9 @@ drivers/md/linear.ko
 drivers/md/md-mod.ko
 drivers/md/multipath.ko
 drivers/md/raid1.ko
-drivers/media/cec
+drivers/media/cec/core
 drivers/mfd/mfd-core.ko
 drivers/misc/cardreader/rtsx_pci.ko
-;drivers/mmc/card/mmc_block.ko
 drivers/mmc/core/mmc_*.ko
 drivers/mmc/host/cqhci.ko
 drivers/mmc/host/rtsx_pci_sdmmc.ko

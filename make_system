@@ -86,7 +86,7 @@ bbx_sbin="acpid adjtimex arp arping blockdev blkdiscard brctl chroot \
 
 ## Collect the required kernel modules
 
-mods=`grep -E '^[a-z]' data/linux-5.7_deb11_modules-list`
+mods=`grep -E '^[a-z]' data/linux-5.8_deb11_modules-list`
 cd w2
 
 for x in $mods; do find /lib/modules/${kv}/kernel/$x | cpio -pdm . ; done
@@ -95,7 +95,10 @@ cp -p /lib/modules/${kv}/modules.builtin /lib/modules/${kv}/modules.order \
 	./usr/lib/modules/${kv}/
 
 # Make sure whether dependency problem occures or not
-/sbin/depmod -b . -F /boot/System.map-${kv} -ae ${kv}
+depmod -b . ${kv}
+# If you have installed the debug package of linux-image
+# run the following command
+#  depmod -b . -F /usr/lib/debug/boot/System.map-${kv} -ae ${kv}
 echo
 
 
