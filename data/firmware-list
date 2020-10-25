@@ -38,7 +38,8 @@ iwlwifi-7260-17.ucode
 iwlwifi-7265D-29.ucode
 
 # ralink
-rt[23]*.bin
+rt2870.bin
+rt73.bin
 
 # realtek
 
