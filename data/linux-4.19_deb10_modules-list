@@ -70,7 +70,10 @@ drivers/net/wireless/broadcom/b43
 drivers/net/wireless/intel/iwlegacy
 drivers/net/wireless/intel/iwlwifi
 drivers/net/wireless/ralink/rt2*/*[bo].ko
-#drivers/net/wireless/realtek
+drivers/net/wireless/realtek/rtlwifi/rtl8192c
+drivers/net/wireless/realtek/rtlwifi/rtl8192cu
+drivers/net/wireless/realtek/rtlwifi/rtl_usb.ko
+drivers/net/wireless/realtek/rtlwifi/rtlwifi.ko
 #drivers/platform/x86/thinkpad_acpi.ko
 drivers/pcmcia
 ;---------------------- amd64   i386

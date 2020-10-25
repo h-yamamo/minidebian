@@ -21,6 +21,7 @@ fakeroot
 file
 firmware-linux-free
 firmware-misc-nonfree
+firmware-realtek
 ftp
 gdisk
 gpgv
