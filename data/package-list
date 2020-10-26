@@ -2,7 +2,8 @@ apg
 bc
 bind9-host
 binutils
-bsdmainutils
+bsdextrautils
+bsdutils
 busybox
 ca-certificates
 console-setup
