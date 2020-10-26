@@ -52,7 +52,7 @@ drivers/md/md-mod.ko
 drivers/md/multipath.ko
 drivers/md/raid1.ko
 drivers/media/cec/core
-drivers/mfd/mfd-core.ko
+#y)drivers/mfd/mfd-core.ko
 drivers/misc/cardreader/rtsx_pci.ko
 drivers/mmc/core/mmc_*.ko
 drivers/mmc/host/cqhci.ko
