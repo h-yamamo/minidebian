@@ -66,6 +66,7 @@ drivers/net/ethernet/realtek
 #drivers/net/ethernet/broadcom/bnx*
 drivers/net/ethernet/broadcom/tg3.ko
 drivers/net/ethernet/intel/e100*
+drivers/net/phy/mdio_devres.ko
 drivers/net/phy/libphy.ko
 #drivers/net/ppp
 #drivers/net/slip

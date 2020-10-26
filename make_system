@@ -86,7 +86,7 @@ bbx_sbin="acpid adjtimex arp arping blockdev blkdiscard brctl chroot \
 
 ## Collect the required kernel modules
 
-mods=`grep -E '^[a-z]' data/linux-5.8_deb11_modules-list`
+mods=`grep -E '^[a-z]' data/linux-5.9_deb11_modules-list`
 cd w2
 
 for x in $mods; do find /lib/modules/${kv}/kernel/$x | cpio -pdm . ; done
