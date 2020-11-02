@@ -67,7 +67,7 @@ drivers/net/ethernet/realtek
 drivers/net/ethernet/broadcom/tg3.ko
 drivers/net/ethernet/intel/e100*
 drivers/net/phy/mdio_devres.ko
-drivers/net/phy/libphy.ko
+drivers/net/phy/[fl]*phy.ko
 #drivers/net/ppp
 #drivers/net/slip
 drivers/net/usb/[abd-gikm-ps-y]*
@@ -79,6 +79,8 @@ drivers/net/wireless/realtek/rtlwifi/rtl8192c
 drivers/net/wireless/realtek/rtlwifi/rtl8192cu
 drivers/net/wireless/realtek/rtlwifi/rtl_usb.ko
 drivers/net/wireless/realtek/rtlwifi/rtlwifi.ko
+; CONFIG_OF_MDIO=m : only i386(686)non-PAE
+drivers/of/of_mdio.ko
 #drivers/platform/x86/thinkpad_acpi.ko
 drivers/pcmcia
 drivers/pps/pps_core.ko
