@@ -1,6 +1,6 @@
 apg
 bc
-bind9-host
+bind9-dnsutils
 binutils
 bsdextrautils
 bsdutils
@@ -12,7 +12,6 @@ cryptsetup-bin
 dc
 debootstrap
 dmsetup
-dnsutils
 dosfstools
 dump
 eject
