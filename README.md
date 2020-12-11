@@ -17,11 +17,23 @@ It is a small system for maintenance and rescue, and its size is about 50 MBytes
 - X86 machines, 64-bit and 32-bit
 - 256 MB RAM or more
 
+## Preparation
+
+Check if the following packages are installed.
+If they are not installed, install these packages.
+
+```
+dpkg -l make whiptail
+
+sudo apt install make whiptail
+```
+
 ## Building a mini Debian
 
-First, `git clone` this repository.
+First, `git clone` this repository,
+or somehow get it and extract it into a working directory.
 
-Run as `root` in a working directory.
+Run the following as `root` in the working directory.
 
 ### Required debian package installation
 
