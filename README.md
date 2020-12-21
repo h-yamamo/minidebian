@@ -101,6 +101,7 @@ fsck
 fsck.exfat
 fsck.ext2 -> e2fsck
 fsck.ext3 -> e2fsck
+fsck.ext4 -> e2fsck
 fsck.fat
 fsck.msdos -> fsck.fat
 fsck.vfat -> fsck.fat
