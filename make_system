@@ -239,6 +239,7 @@ ln -s /bin/ip sbin/ip
 ln -s /bin/udevadm sbin/udevadm
 ln -s e2fsck sbin/fsck.ext2
 ln -s e2fsck sbin/fsck.ext3
+ln -s e2fsck sbin/fsck.ext4
 ln -s mke2fs sbin/mkfs.ext2
 ln -s mke2fs sbin/mkfs.ext3
 ln -s mke2fs sbin/mkfs.ext4
