@@ -14,6 +14,7 @@ debootstrap
 dmsetup
 dosfstools
 dump
+e2fsprogs
 eject
 exfatprogs
 fakeroot
@@ -58,10 +59,12 @@ stress
 sysv-rc
 tcpdump
 telnet
+tzdata
 unrar
 usbutils
 uuidcdef
 vim-tiny
+whiptail
 wireless-tools
 wpasupplicant
 xz-utils

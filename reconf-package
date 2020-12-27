@@ -1,0 +1,82 @@
+#!/bin/sh
+
+if [ "$#" -gt 0 -a "$1" = "once" ]; then
+	if [ ! -f pkg.reconf/.b ]; then
+		echo " invalid mode now."
+		exit 1
+	fi
+	if [ "$(cat pkg.reconf/.b)" != "1" ]; then
+		if [ "$#" -ge 2 ]; then
+		  echo " whiptail is not installed, so do not configure."
+		fi
+		exit
+	fi
+	if [ -e pkg.reconf/keyboard ]; then
+		dpkg-reconfigure -p medium keyboard-configuration
+		dpkg-reconfigure -p critical console-setup
+		rm pkg.reconf/keyboard
+	fi
+	if [ -e pkg.reconf/console ]; then
+		dpkg-reconfigure -p medium console-setup
+		rm pkg.reconf/console
+	fi
+	if [ -e pkg.reconf/tz ]; then
+		dpkg-reconfigure -p high tzdata
+		rm pkg.reconf/tz
+	fi
+	exit
+fi
+
+if [ "$#" -gt 0 ]; then
+	echo " unknown argument."
+	exit 1
+fi
+
+## interactive mode
+
+if ! grep -A 1 "^Package: whiptail$" /var/lib/dpkg/status \
+   | grep -q "^Status: install ok " ; then
+	echo " whiptail is not installed, so do not configure."
+	exit
+fi
+
+read -p "Re-configure 'keyboard-configuration' package? (Y/n) " rp
+
+[ -z "$rp" ] && rp=Y
+case "$rp" in
+  Y|YES|Yes|y|yes)
+	dpkg-reconfigure -p medium keyboard-configuration
+	dpkg-reconfigure -p critical console-setup
+	;;
+  N|NO|No|n|no)
+	;;
+  *)	echo " ?? unknown replay, skipping." ;;
+esac
+
+echo
+read -p "Re-configure 'console-setup' package? (Y/n) " rp
+
+[ -z "$rp" ] && rp=Y
+case "$rp" in
+  Y|YES|Yes|y|yes)
+	dpkg-reconfigure -p medium console-setup
+	;;
+  N|NO|No|n|no)
+	;;
+  *)	echo " ?? unknown replay, skipping." ;;
+esac
+
+echo
+read -p "Re-configure 'tzdata' package? (Y/n) " rp
+
+[ -z "$rp" ] && rp=Y
+case "$rp" in
+  Y|YES|Yes|y|yes)
+	dpkg-reconfigure -p high tzdata
+	;;
+  N|NO|No|n|no)
+	;;
+  *)	echo " ?? unknown replay, skipping." ;;
+esac
+
+exit
