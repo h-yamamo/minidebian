@@ -1,2 +1,6 @@
-#linux-image-4.19.0-6-amd64
+#linux-image-5.XX.0-NN-amd64
+  - you must install linux package in some way.
+
 #firmware-iwlwifi
+  - install the package if necessary,
+    or manually copy required firmware files to /lib/firmware directory.
