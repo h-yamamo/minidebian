@@ -3,8 +3,12 @@ arch/x86/crypto/crc[3t]*.ko
 arch/x86/crypto/glue_helper.ko
 block/t10-pi.ko
 crypto/aes_generic.ko
-crypto/a[bflr]*.ko
-crypto/c[bcm]*.ko
+crypto/af_alg.ko
+crypto/algif_*.ko
+crypto/arc4.ko
+crypto/cbc.ko
+crypto/ccm.ko
+crypto/cmac.ko
 crypto/crc3*.ko
 crypto/crct10dif_*.ko
 crypto/cryptd.ko
@@ -12,7 +16,8 @@ crypto/crypto_simd.ko
 crypto/ctr.ko
 crypto/ecb.ko
 crypto/fcrypt.ko
-crypto/g[fh]*.ko
+crypto/gf128mul.ko
+crypto/ghash-generic.ko
 crypto/lrw.ko
 crypto/sha512_generic.ko
 crypto/xts.ko
@@ -22,11 +27,14 @@ drivers/acpi/button.ko
 drivers/acpi/fan.ko
 #y)drivers/acpi/thermal.ko
 drivers/acpi/video.ko
-drivers/ata/ata_*.ko
-drivers/ata/*ahci.ko
+drivers/ata/ahci.ko
+drivers/ata/ata_generic.ko
+drivers/ata/ata_piix.ko
+drivers/ata/libahci.ko
 drivers/ata/libata.ko
 drivers/bcma
-drivers/block/[fl]*.ko
+drivers/block/floppy.ko
+drivers/block/loop.ko
 drivers/cdrom
 drivers/char/raw.ko
 drivers/char/hw_random/rng-core.ko
@@ -36,7 +44,7 @@ drivers/gpu/drm/drm_kms_helper.ko
 drivers/gpu/drm/i915/i915.ko
 drivers/gpu/drm/radeon
 drivers/gpu/drm/tiny/cirrus.ko
-drivers/gpu/drm/ttm
+drivers/gpu/drm/ttm/ttm.ko
 drivers/hid/hid.ko
 drivers/hid/hid-generic.ko
 drivers/hid/usbhid
@@ -59,15 +67,17 @@ drivers/mmc/host/cqhci.ko
 drivers/mmc/host/rtsx_pci_sdmmc.ko
 drivers/mmc/host/sdhci-pci.ko
 drivers/mmc/host/sdhci.ko
-drivers/net/m[di]*.ko
 drivers/net/ethernet/8390
 drivers/net/ethernet/atheros
 drivers/net/ethernet/realtek
 #drivers/net/ethernet/broadcom/bnx*
 drivers/net/ethernet/broadcom/tg3.ko
 drivers/net/ethernet/intel/e100*
+drivers/net/mdio.ko
+drivers/net/mii.ko
+drivers/net/phy/fixed_phy.ko
+drivers/net/phy/libphy.ko
 drivers/net/phy/mdio_devres.ko
-drivers/net/phy/[fl]*phy.ko
 #drivers/net/ppp
 #drivers/net/slip
 drivers/net/usb/[abd-gikm-ps-y]*
@@ -89,7 +99,7 @@ drivers/scsi/scsi_mod.ko
 drivers/scsi/sd_mod.ko
 drivers/scsi/sg.ko
 drivers/scsi/sr_mod.ko
-drivers/ssb
+drivers/ssb/ssb.ko
 drivers/usb/common
 drivers/usb/core/usbcore.ko
 drivers/usb/host/[eox]*.ko
@@ -103,7 +113,7 @@ drivers/usb/storage/u[as]*.ko
 ; CONFIG_FB_SYS_FOPS=y          y             m
 drivers/video/fbdev/core/fb_sys_fops.ko
 drivers/video/fbdev/core/sys*.ko
-fs/[bm]*.ko
+fs/binfmt_misc.ko
 #fs/btrfs
 #fs/cifs
 #y)fs/crypto
@@ -116,6 +126,7 @@ fs/fuse/fuse.ko
 fs/isofs
 fs/jbd2
 #fs/lockd
+fs/mbcache.ko
 #fs/nfs
 #fs/nfs_common
 #fs/nfsd
