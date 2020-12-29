@@ -21,9 +21,6 @@ pkg.reconf/.b:
 	grep -A 1 "^Package: tzdata$$" /var/lib/dpkg/status \
 	 | grep -q "^Status: install ok " \
 	 || touch pkg.reconf/tz
-	echo "1" > $@
-	grep -A 1 "^Package: whiptail$$" /var/lib/dpkg/status \
-	 | grep -q "^Status: install ok " \
-	 || echo "" > $@
+	touch $@
 
 .PHONY: _build prepare_package

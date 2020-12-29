@@ -1,15 +1,15 @@
 #!/bin/sh
 
+if ! grep -A 1 "^Package: whiptail$" /var/lib/dpkg/status \
+   | grep -q "^Status: install ok " ; then
+	echo " whiptail is not installed, so do not configure."
+	exit
+fi
+
 if [ "$#" -gt 0 -a "$1" = "once" ]; then
 	if [ ! -f pkg.reconf/.b ]; then
 		echo " invalid mode now."
 		exit 1
-	fi
-	if [ "$(cat pkg.reconf/.b)" != "1" ]; then
-		if [ "$#" -ge 2 ]; then
-		  echo " whiptail is not installed, so do not configure."
-		fi
-		exit
 	fi
 	if [ -e pkg.reconf/keyboard ]; then
 		dpkg-reconfigure -p medium keyboard-configuration
@@ -33,12 +33,6 @@ if [ "$#" -gt 0 ]; then
 fi
 
 ## interactive mode
-
-if ! grep -A 1 "^Package: whiptail$" /var/lib/dpkg/status \
-   | grep -q "^Status: install ok " ; then
-	echo " whiptail is not installed, so do not configure."
-	exit
-fi
 
 read -p "Re-configure 'keyboard-configuration' package? (Y/n) " rp
 
