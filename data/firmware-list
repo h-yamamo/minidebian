@@ -1,13 +1,15 @@
 ## VGA
 
 # intel graphics
-i915/bxt_dmc_ver1_07.bin
-i915/bxt_guc_ver8_7.bin
-i915/kbl_dmc_ver1_04.bin
-i915/kbl_guc_ver9_39.bin
+!i915/bxt_dmc_ver1_07.bin
+!i915/bxt_guc_ver9_29.bin
+!i915/cnl_dmc_ver1_07.bin
+!i915/glk_dmc_ver1_04.bin
+!i915/kbl_dmc_ver1_04.bin
+!i915/kbl_guc_ver9_39.bin
 i915/skl_dmc_ver1_27.bin
-i915/skl_guc_ver6_1.bin
-       
+!i915/skl_guc_ver9_33.bin
+
 # radeon
 !radeon/R100*
 !radeon/R600_r*
@@ -30,12 +32,19 @@ cis
 # iwlwifi
 ; Thinkpad X61
 iwlwifi-4965-2.ucode
+; Thinkpad X220
+!iwlwifi-6000-4.ucode
+!iwlwifi-6000g2a-6.ucode
 ; Thinkpad X230
 iwlwifi-6050-5.ucode
 ; Thinkpad X240
 iwlwifi-7260-17.ucode
 ; Thinkpad X250
 iwlwifi-7265D-29.ucode
+; Thinkpad X260
+!iwlwifi-8000C-36.ucode
+; Thinkpad X270
+!iwlwifi-8265-36.ucode
 
 # ralink
 rt2870.bin
