@@ -54,7 +54,7 @@ make
 
 ### Copy kernel and the initrd
 
-- Copy `/boot/vmlinuz-5.9.0-N-XXX` and `initrd.img-minideb-5.9.0-N-XXX` to target.
+- Copy `/boot/vmlinuz-5.10.0-N-XXX` and `initrd.img-minideb-5.10.0-N-XXX` to target.
 - Enable booting with `grub` or `syslinux`.
 - No kernel boot option required.
 
