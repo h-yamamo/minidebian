@@ -148,7 +148,7 @@ for x in $bns; do ../copy-exec-with-shlibs /sbin/$x . ; done
 bns="base64 bc ckbcomp cpufreq-info cpufreq-set dc diff dig dircolors \
   dpkg dpkg-deb du file eject faked-sysv find getopt gpgv hexdump hexer \
   host iperf $less_ubn lscpu lspci lsusb lzip.lzip mawk make openssl passwd \
-  perl pstree pv scp sftp ssh setvtrgb stress top tput tracepath \
+  perl pstree pv scp sftp ssh setvtrgb stress tcpdump top tput tracepath \
   traceroute6.iputils tset $unrar_bn uuidcdef vim.tiny wget xargs \
   ${arch_prefix}-objdump  xz zstd"
 #	${arch_prefix}-readelf
@@ -156,8 +156,7 @@ bns="base64 bc ckbcomp cpufreq-info cpufreq-set dc diff dig dircolors \
 for x in $bns; do ../copy-exec-with-shlibs /usr/bin/$x . ; done
 
 ## /usr/sbin/ binary executables
-bns="dmidecode fsck.exfat mkfs.exfat ntpdate rfkill smartctl tcpdump \
-  tune.exfat"
+bns="dmidecode fsck.exfat mkfs.exfat ntpdate rfkill smartctl tune.exfat"
 
 for x in $bns; do ../copy-exec-with-shlibs /usr/sbin/$x . ; done
 

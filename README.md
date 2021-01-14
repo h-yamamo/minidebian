@@ -177,7 +177,6 @@ swapon -> busybox
 switch_root -> busybox
 sysctl
 syslogd -> busybox
-tcpdump
 tune.exfat
 tune2fs
 udhcpc -> busybox
@@ -394,6 +393,7 @@ tac -> busybox
 tail -> busybox
 tar
 taskset -> busybox
+tcpdump
 tee -> busybox
 telnet -> telnet.netkit
 telnet.netkit
