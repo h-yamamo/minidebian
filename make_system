@@ -136,8 +136,8 @@ bns01="cfdisk fdisk sfdisk gdisk parted"
 bns02="fsck mke2fs e2fsck tune2fs resize2fs dump restore \
   mkfs.fat fatlabel fsck.fat mkntfs ntfsclone"
 bns03="cryptsetup dhclient dmsetup hdparm iw killall5 ldconfig losetup \
-  mkhomedir_helper pam_tally pam_tally2 start-stop-daemon sysctl \
-  unix_chkpwd unix_update fstab-decode iwconfig wpa_cli wpa_supplicant"
+  mkhomedir_helper start-stop-daemon sysctl unix_chkpwd unix_update \
+  fstab-decode iwconfig wpa_cli wpa_supplicant"
 bns="$bns01 $bns02 $bns03"
 
 for x in $bns; do ../copy-exec-with-shlibs /sbin/$x . ; done
@@ -161,7 +161,6 @@ bns="dmidecode fsck.exfat mkfs.exfat ntpdate rfkill smartctl tune.exfat"
 for x in $bns; do ../copy-exec-with-shlibs /usr/sbin/$x . ; done
 
 ## other binaries
-../copy-exec-with-shlibs /lib/${arch_triple}/security/pam_lastlog.so .
 ../copy-exec-with-shlibs /lib/${arch_triple}/security/pam_unix.so .
 ../copy-exec-with-shlibs /usr/lib/apg/apg .
 ../copy-exec-with-shlibs /usr/lib/p7zip/7z .
@@ -169,7 +168,10 @@ for x in $bns; do ../copy-exec-with-shlibs /usr/sbin/$x . ; done
 ## manually copy shared libs
 find /lib/${arch_triple}/libnss_[cdf]* | cpio -pdm .
 find /lib/${arch_triple}/libpamc.* | cpio -pdm .
-find /lib/${arch_triple}/security | cpio -pdm .
+pms="deny env faildelay group issue keyinit lastlog limits loginuid mail \
+  motd nologin permit rootok selinux shells"
+for x in $pms; do find /lib/${arch_triple}/security/pam_${x}.so | cpio -pdm .
+	done
 find /usr/lib/${arch_triple}/libfakeroot/libfakeroot-sysv.so | cpio -pdm .
 
 #== custom

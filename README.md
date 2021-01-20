@@ -155,8 +155,6 @@ ntfsclone
 ntpdate
 pam-auth-update
 pam_getenv
-pam_tally
-pam_tally2
 parted
 partprobe -> busybox
 pivot_root -> busybox
