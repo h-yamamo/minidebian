@@ -54,7 +54,7 @@ ldconfig -r $(pwd)
 install -p -o 0 -g 0 -m 0755 ../data/init .
 
 # make initrd image
-find . | cpio --quiet -o -H newc | gzip -9 >../initrd.img-minideb-${kv}
+find . | cpio --quiet -o -H newc | zstd -12 -fq -o ../initrd.img-minideb-${kv}
 #	  -R 0:0 --reproducible
 set +x
 ls -l ../initrd.img-minideb-${kv}
