@@ -19,13 +19,12 @@ It is a small system for maintenance and rescue, and its size is about 50 MBytes
 
 ## Preparation
 
-Check if the following packages are installed.
-If they are not installed, install these packages.
+Make sure you have `make` package installed, as we will use `make` below
+to install the required packages and build mini Debian.
+If `make` is not installed, install it as follows.
 
 ```
-dpkg -l make whiptail
-
-sudo apt install make whiptail
+sudo apt install make
 ```
 
 ## Building a mini Debian
