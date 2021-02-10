@@ -4,7 +4,7 @@
 !i915/bxt_dmc_ver1_07.bin
 !i915/bxt_guc_ver9_29.bin
 !i915/cnl_dmc_ver1_07.bin
-!i915/glk_dmc_ver1_04.bin
+i915/glk_dmc_ver1_04.bin
 !i915/kbl_dmc_ver1_04.bin
 !i915/kbl_guc_ver9_39.bin
 i915/skl_dmc_ver1_27.bin
