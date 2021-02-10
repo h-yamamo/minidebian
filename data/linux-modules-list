@@ -5,7 +5,6 @@ block/t10-pi.ko
 crypto/aes_generic.ko
 crypto/af_alg.ko
 crypto/algif_*.ko
-crypto/arc4.ko
 crypto/cbc.ko
 crypto/ccm.ko
 crypto/cmac.ko
