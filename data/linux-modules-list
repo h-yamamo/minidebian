@@ -90,6 +90,8 @@ drivers/net/wireless/realtek/rtlwifi/rtl8192c
 drivers/net/wireless/realtek/rtlwifi/rtl8192cu
 drivers/net/wireless/realtek/rtlwifi/rtl_usb.ko
 drivers/net/wireless/realtek/rtlwifi/rtlwifi.ko
+drivers/nvme/host/nvme-core.ko
+drivers/nvme/host/nvme.ko
 #drivers/platform/x86/thinkpad_acpi.ko
 drivers/pcmcia
 drivers/pps/pps_core.ko
