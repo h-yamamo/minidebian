@@ -6,7 +6,7 @@
 !i915/cml_guc_33.0.0.bin
 !i915/cnl_dmc_ver1_07.bin
 !i915/ehl_guc_33.0.4.bin
-!i915/glk_dmc_ver1_04.bin
+i915/glk_dmc_ver1_04.bin
 !i915/glk_guc_33.0.0.bin
 !i915/icl_dmc_ver1_09.bin
 !i915/icl_guc_33.0.0.bin
