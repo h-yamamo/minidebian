@@ -142,7 +142,7 @@ for x in $bns; do ../copy-exec-with-shlibs /sbin/$x . ; done
 ## /usr/bin/ binary executables
 [ -z "$less_bn" ] && less_ubn="less lessecho"
 [ -x /usr/bin/unrar-nonfree ] && unrar_bn="unrar-nonfree"
-bns="base64 bc ckbcomp cpufreq-info cpufreq-set dc diff dig dircolors \
+bns="base64 bc cpufreq-info cpufreq-set dc diff dig dircolors \
   dpkg dpkg-deb du file eject faked-sysv find getopt gpgv hexdump hexer \
   host iperf $less_ubn lscpu lspci lsusb lzip.lzip mawk make openssl passwd \
   perl pstree pv scp sftp ssh setvtrgb stress top tput tracepath \
@@ -193,6 +193,9 @@ echo /bin/setupcon | cpio -pdm .
 echo ${less_p}/bin/lesspipe | cpio -pdm .
 echo /usr/bin/7z | cpio -pdm .
 echo /usr/bin/apg | cpio -pdm .
+echo /usr/bin/ckbcomp | cpio -pdm .
+find /usr/lib/${arch_triple}/perl-base/strict.pm | cpio -pdm .
+find /usr/lib/${arch_triple}/perl-base/warnings.pm | cpio -pdm .
 echo /usr/bin/fakeroot-sysv | cpio -pdm .
 echo /usr/bin/savelog | cpio -pdm .
 echo /usr/bin/ldd | cpio -pdm .
