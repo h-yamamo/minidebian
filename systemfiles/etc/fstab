@@ -13,6 +13,11 @@
 /dev/mmcblk0p3	/media/mmcblk0p3 auto	noauto,user,noatime	0	0
 /dev/mmcblk0p4	/media/mmcblk0p4 auto	noauto,user,noatime	0	0
 
+/dev/nvme0n1p1	/media/nvme0n1p1 auto	noauto,user,noatime	0	0
+/dev/nvme0n1p2	/media/nvme0n1p2 auto	noauto,user,noatime	0	0
+/dev/nvme0n1p3	/media/nvme0n1p3 auto	noauto,user,noatime	0	0
+/dev/nvme0n1p4	/media/nvme0n1p4 auto	noauto,user,noatime	0	0
+
 /dev/sda1	/media/sda1	auto	noauto,user,noatime	0	0
 /dev/sda2	/media/sda2	auto	noauto,user,noatime	0	0
 /dev/sda3	/media/sda3	auto	noauto,user,noatime	0	0
