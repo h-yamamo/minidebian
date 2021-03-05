@@ -156,7 +156,8 @@ bns="base64 bc cpufreq-info cpufreq-set dc diff dig dircolors \
 for x in $bns; do ../copy-exec-with-shlibs /usr/bin/$x . ; done
 
 ## /usr/sbin/ binary executables
-bns="dmidecode fsck.exfat mkfs.exfat ntpdate rfkill smartctl tune.exfat"
+bns="dmidecode ntpdate rfkill smartctl \
+  dump.exfat fsck.exfat mkfs.exfat tune.exfat"
 
 for x in $bns; do ../copy-exec-with-shlibs /usr/sbin/$x . ; done
 

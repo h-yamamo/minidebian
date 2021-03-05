@@ -92,6 +92,7 @@ dmidecode
 dmsetup
 dmstats -> dmsetup
 dump
+dump.exfat
 e2fsck
 fatlabel
 fdisk
