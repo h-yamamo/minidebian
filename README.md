@@ -57,8 +57,29 @@ make
 - Enable booting with `grub` or `syslinux`.
 - No kernel boot option required.
 
-It is optimized for ThinkPad X61, ThinkPad X230 and ThinkPad X250.
-So customization is recommended.
+For example, to install mini Debian on your Debian system,
+do the following with `root` privilege.
+
+1) Copy it to boot directory
+```
+cp (build dir)/initrd.img-minideb-5.10.0-4-amd64 /boot/
+```
+
+2) Edit `/etc/grub.d/40_custom`
+```
+menuentry 'mini Debian' {
+    search --no-floppy --fs-uuid --set=root XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+    linux   /boot/vmlinuz-5.10.0-4-amd64
+    initrd  /boot/initrd.img-minideb-5.10.0-4-amd64
+}
+```
+
+3) Update grub.cfg
+```
+update-grub
+```
+
+Now, reboot and select 'mini Debian' from the grub menu to boot `mini Debian`.
 
 ## Login accounts
 
@@ -451,6 +472,12 @@ zcat -> busybox
 zstd
 zstdcat -> zstd
 ```
+
+## Notes
+
+It is optimized for ThinkPad X61, ThinkPad X230 and ThinkPad X250,
+customization is recommended.  Update the following files to customize:
+`make_system`, `data/*`, `systemfiles/*`
 
 ## References
 
