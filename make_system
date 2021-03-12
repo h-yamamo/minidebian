@@ -17,6 +17,10 @@ case "$arch_deb" in
     arch_triple="x86_64-linux-gnux32"
     arch_prefix="x86_64-linux-gnux32"
     ;;
+  arm64)
+    arch_triple="aarch64-linux-gnu"
+    arch_prefix="aarch64-linux-gnu"
+    ;;
   *)
     echo "not supported architecture."; exit 1
     ;;
@@ -90,11 +94,14 @@ cd w2
 
 for x in $mods; do find /lib/modules/${kv}/kernel/$x | cpio -pdm . ; done
 
+mkdir -p ./usr/lib/modules/${kv}/
 cp -p /lib/modules/${kv}/modules.builtin /lib/modules/${kv}/modules.order \
 	./usr/lib/modules/${kv}/
 
 # Make sure whether dependency problem occures or not
-/sbin/depmod -b . -F /boot/System.map-${kv} -ae ${kv}
+if [ "$(uname -r)" == "${kv}" ];then
+  /sbin/depmod -b . -F /boot/System.map-${kv} -ae ${kv}
+fi
 echo
 
 
