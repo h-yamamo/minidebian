@@ -81,6 +81,16 @@ update-grub
 
 Now, reboot and select 'mini Debian' from the grub menu to boot `mini Debian`.
 
+### Boot options
+
+There is a mini Debian specific boot option `rootfssize`.
+Specify if there is a problem with the default value.
+See `man 5 tmpfs` for how to specify. e.g. `rootfssize=60%`
+
+You may also specify kernel command line options.
+If you want to change the console resolution, specify the `video` option.
+e.g. `video=800x600-16`
+
 ## Login accounts
 
 - `root/minidebian`
@@ -484,4 +494,5 @@ customization is recommended.  Update the following files to customize:
 - [disklessfun/minimum-ubuntu](https://wikiwiki.jp/disklessfun/minimum-ubuntu)
 - [BootUsbWithGrubRescu](https://wiki.debian.org/BootUsbWithGrubRescue)
 - [Basic knowledge to start up embedded Linux](http://www.poyontech.com/wp/2017/02/07/post-131/)
+- [Kernel mode setting - ArchWiki](https://wiki.archlinux.org/index.php/Kernel_mode_setting)
 
