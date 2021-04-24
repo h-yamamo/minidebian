@@ -1,0 +1,10 @@
+## specify the program to be executed with full-path.
+
+ACTION=="add",\
+	KERNEL=="sd[a-f]*|vd[a-f]*", ENV{DEVTYPE}=="disk|partition",\
+	RUN+="/bin/mkdir /media/%k"
+
+ACTION=="remove",\
+	KERNEL=="sd[a-f]*|vd[a-f]*", ENV{DEVTYPE}=="disk|partition",\
+	RUN+="/bin/rmdir /media/%k"
+

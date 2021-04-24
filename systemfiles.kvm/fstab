@@ -1,0 +1,29 @@
+#		<mp>		<type>	<opt>			<chk>	<n>
+#rootfs		/		tmpfs	defaults		0	0
+#swap dev/file	none		swap	sw			0	0
+
+/dev/hdc	/media/cd	udf,iso9660	noauto,user,ro	0	0
+/dev/sr0	/media/cd0	udf,iso9660	noauto,user,ro	0	0
+/dev/fd0	/media/fd	exfat,vfat	noauto,user,noatime,fmask=137,dmask=27 0 0
+/dev/sda1	/media/u1	exfat,vfat	noauto,user,noatime,fmask=137,dmask=27 0 0
+
+/dev/sda1	/media/sda1	auto	noauto,user,noatime	0	0
+/dev/sdb1	/media/sdb1	auto	noauto,user,noatime	0	0
+
+/dev/vda	/media/vda	auto	noauto,user,noatime	0	0
+/dev/vda1	/media/vda1	auto	noauto,user,noatime	0	0
+/dev/vda2	/media/vda2	auto	noauto,user,noatime	0	0
+/dev/vda3	/media/vda3	auto	noauto,user,noatime	0	0
+/dev/vda4	/media/vda4	auto	noauto,user,noatime	0	0
+/dev/vda5	/media/vda5	auto	noauto,user,noatime	0	0
+/dev/vda6	/media/vda6	auto	noauto,user,noatime	0	0
+/dev/vda7	/media/vda7	auto	noauto,user,noatime	0	0
+/dev/vda8	/media/vda8	auto	noauto,user,noatime	0	0
+
+/dev/vdb	/media/vdb	auto	noauto,user,noatime	0	0
+/dev/vdb1	/media/vdb1	auto	noauto,user,noatime	0	0
+/dev/vdb2	/media/vdb2	auto	noauto,user,noatime	0	0
+
+/dev/vdc	/media/vdc	auto	noauto,user,noatime	0	0
+/dev/vdc1	/media/vdc1	auto	noauto,user,noatime	0	0
+

@@ -23,6 +23,12 @@ case "$arch_deb" in
 esac
 
 set -x
+# machine type: ordinary PC / KVM
+mtyp=ord
+if [ "$MINIDEB_MTYPE" = "kvm" ]; then
+	mtyp=kvm
+	sfx=.kvm
+fi
 
 # source: w0/ and the current system
 # dest: w2/ second stage in initrd
@@ -86,7 +92,7 @@ bbx_sbin="acpid adjtimex arp arping blockdev blkdiscard brctl chroot \
 
 ## Collect the required kernel modules
 
-mods=`grep -E '^[a-z]' data/linux-modules-list`
+mods=`grep -E '^[a-z]' data/linux-modules-list$sfx`
 cd w2
 
 for x in $mods; do find /lib/modules/${kv}/kernel/$x | cpio -pdm . ; done
@@ -115,29 +121,35 @@ echo
 #	firmware-misc-nonfree
 #	firmware-realtek
 
-fmws=`grep -E '^[3Ra-z]' ../data/firmware-list`
-
-for x in $fmws; do find /lib/firmware/$x | cpio -pdm . ; done
-
+if [ "$mtyp" = "ord" ]; then
+    fmws=`grep -E '^[3Ra-z]' ../data/firmware-list`
+    for x in $fmws; do find /lib/firmware/$x | cpio -pdm . ; done
+fi
 
 dpkg -L less | grep lessecho | grep bin | grep usr && less_p="/usr"
 
 ## /bin/ binary executables
 [ -z "$less_p" ] && less_bn="less lessecho"
+[ "$mtyp" = "ord" ] && \
+    ntfs_bn="lowntfs-3g ntfs-3g ntfs-3g.probe ntfsfix ntfsinfo"
+
 bns="bash chmod chown cp date dd df echo fuser ip kbd_mode $less_bn \
-  loadkeys login lowntfs-3g ls lsblk mount mountpoint mv nc.openbsd \
-  ntfs-3g ntfs-3g.probe ntfsfix ntfsinfo ping ps readlink run-parts \
-  sed setfont ss su systemd-hwdb tar udevadm umount"
+  loadkeys login ls lsblk mount mountpoint mv nc.openbsd $ntfs_bn ping \
+  ps readlink run-parts sed setfont ss su systemd-hwdb tar udevadm umount"
 
 for x in $bns; do ../copy-exec-with-shlibs /bin/$x . ; done
 
 ## /sbin/ binary executables
+if [ "$mtyp" = "ord" ]; then
+    ntfs_bn="mkntfs ntfsclone"
+    wifi_bn="iw iwconfig wpa_cli wpa_supplicant"
+fi
 bns01="cfdisk fdisk sfdisk gdisk parted"
 bns02="fsck mke2fs e2fsck tune2fs resize2fs dump restore \
-  mkfs.fat fatlabel fsck.fat mkntfs ntfsclone"
-bns03="cryptsetup dhclient dmsetup hdparm iw killall5 ldconfig losetup \
+  mkfs.fat fatlabel fsck.fat $ntfs_bn"
+bns03="cryptsetup dhclient dmsetup hdparm killall5 ldconfig losetup \
   mkhomedir_helper start-stop-daemon sysctl unix_chkpwd unix_update \
-  fstab-decode iwconfig wpa_cli wpa_supplicant"
+  fstab-decode $wifi_bn"
 bns="$bns01 $bns02 $bns03"
 
 for x in $bns; do ../copy-exec-with-shlibs /sbin/$x . ; done
@@ -145,7 +157,8 @@ for x in $bns; do ../copy-exec-with-shlibs /sbin/$x . ; done
 ## /usr/bin/ binary executables
 [ -z "$less_bn" ] && less_ubn="less lessecho"
 [ -x /usr/bin/unrar-nonfree ] && unrar_bn="unrar-nonfree"
-bns="base64 bc cpufreq-info cpufreq-set dc diff dig dircolors \
+[ "$mtyp" = "ord" ] && cpu_bn="cpufreq-info cpufreq-set"
+bns="base64 bc dc diff dig dircolors $cpu_bn \
   dpkg dpkg-deb du file eject faked-sysv find getopt gpgv hexdump hexer \
   host iperf $less_ubn lscpu lspci lsusb lzip.lzip mawk make openssl passwd \
   perl pstree pv scp sftp ssh setvtrgb stress tcpdump top tput tracepath \
@@ -156,8 +169,8 @@ bns="base64 bc cpufreq-info cpufreq-set dc diff dig dircolors \
 for x in $bns; do ../copy-exec-with-shlibs /usr/bin/$x . ; done
 
 ## /usr/sbin/ binary executables
-bns="dmidecode ntpdate rfkill smartctl \
-  dump.exfat fsck.exfat mkfs.exfat tune.exfat"
+bns="dmidecode dump.exfat fsck.exfat mkfs.exfat tune.exfat"
+[ "$mtyp" = "ord" ] && bns="$bns ntpdate rfkill smartctl"
 
 for x in $bns; do ../copy-exec-with-shlibs /usr/sbin/$x . ; done
 
@@ -255,10 +268,12 @@ ln -s fsck.fat sbin/fsck.msdos
 ln -s fsck.fat sbin/fsck.vfat
 ln -s mkfs.fat sbin/mkfs.msdos
 ln -s mkfs.fat sbin/mkfs.vfat
-ln -s mkntfs sbin/mkfs.ntfs
-ln -s /bin/lowntfs-3g sbin/mount.lowntfs-3g
-ln -s /bin/ntfs-3g sbin/mount.ntfs-3g
-ln -s mount.ntfs-3g sbin/mount.ntfs
+if [ "$mtyp" = "ord" ]; then
+    ln -s mkntfs sbin/mkfs.ntfs
+    ln -s /bin/lowntfs-3g sbin/mount.lowntfs-3g
+    ln -s /bin/ntfs-3g sbin/mount.ntfs-3g
+    ln -s mount.ntfs-3g sbin/mount.ntfs
+fi
 ln -s dmsetup sbin/dmstats
 [ -n "$unrar_bn" ] && ln -s unrar-nonfree usr/bin/unrar
 
@@ -317,7 +332,9 @@ find etc/rc2.d -type l -exec ../remove-dead-symlink {} \; -print
 find etc/rc6.d -type l -exec ../remove-dead-symlink {} \; -print
 rm -f etc/rc*.d/README
 
-if [ "$MINIDEB_RTC" = "local" ]; then
+if [ "$mtyp" = "kvm" ]; then
+	rtc_local=no
+elif [ "$MINIDEB_RTC" = "local" ]; then
 	rtc_local=yes
 elif [ "$MINIDEB_RTC" = "utc" ]; then
 	rtc_local=no
@@ -378,6 +395,14 @@ install -o 1000 -g 1000 -m 644 -p \
 
 # set account/password of 'root' and 'user'
 ../mangle-passwdgroup "$srcETC"
+
+if [ "$mtyp" = "kvm" ]; then
+	rm -rf etc/wpa_supplicant
+	rm -f usr/local/sbin/iw*
+	install -o 0 -g 0 -m 644 -p \
+		../systemfiles.kvm/60-storage-mountpoint.rules etc/udev/rules.d/
+	install -o 0 -g 0 -m 644 -p ../systemfiles.kvm/fstab etc/
+fi
 
 echo "mini Debian 11 (linux ${kv}) \\l" >etc/issue
 echo >>etc/issue

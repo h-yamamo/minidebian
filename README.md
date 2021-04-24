@@ -489,6 +489,18 @@ It is optimized for ThinkPad X61, ThinkPad X230 and ThinkPad X250,
 customization is recommended.  Update the following files to customize:
 `make_system`, `data/*`, `systemfiles/*`
 
+## For QEMU KVM
+
+You can also build mini Debian for QEMU KVM.
+This option uses `virtio` modules for network and storage drivers.
+Run the following as `root`.
+
+```
+make MACHINE=kvm prepare_package
+
+make MACHINE=kvm
+```
+
 ## References
 
 - [disklessfun/minimum-ubuntu](https://wikiwiki.jp/disklessfun/minimum-ubuntu)
