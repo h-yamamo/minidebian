@@ -285,6 +285,7 @@ find /lib/init | cpio -pdm .
 find /lib/terminfo | cpio -pdm .
 find /lib/console-setup | cpio -pdm .
 find /lib/udev | cpio -pdm .
+[ -L /lib ] || find /usr/lib/udev | cpio -pdm .
 # customize
 rm -f usr/lib/udev/hdparm usr/lib/udev/ifupdown-hotplug \
 	usr/lib/udev/rules.d/73-usb-net-by-mac.rules \
