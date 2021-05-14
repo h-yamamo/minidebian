@@ -17,7 +17,7 @@ if [ "$#" -gt 0 -a "$1" = "once" ]; then
 		rm pkg.reconf/keyboard
 	fi
 	if [ -e pkg.reconf/console ]; then
-		dpkg-reconfigure -p medium console-setup
+		dpkg-reconfigure -p low console-setup
 		rm pkg.reconf/console
 	fi
 	if [ -e pkg.reconf/tz ]; then
@@ -53,7 +53,7 @@ read -p "Re-configure 'console-setup' package? (Y/n) " rp
 [ -z "$rp" ] && rp=Y
 case "$rp" in
   Y|YES|Yes|y|yes)
-	dpkg-reconfigure -p medium console-setup
+	dpkg-reconfigure -p low console-setup
 	;;
   N|NO|No|n|no)
 	;;
