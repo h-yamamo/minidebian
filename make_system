@@ -322,6 +322,9 @@ dstETC=$(pwd)/etc
 for x in `cat ../data/etc-list`;
 	do (cd "$srcETC"; find $x | cpio -pdmu $dstETC); done
 
+# check the encoding: if you get an error here, reconfigure console-setup.
+[ -f ./etc/console-setup/cached_UTF-8_del.kmap.gz ] || exit 1
+
 # for init
 fixETC="$srcETC"
 [ -d "$srcETC/rcS.d" -a -d "$srcETC/rc2.d" -a -d "$srcETC/rc6.d" ] \
