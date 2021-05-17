@@ -28,6 +28,11 @@ dpkg -l make whiptail
 sudo apt install make whiptail
 ```
 
+options packages:
+```
+psmisc ntfs-3g gdisk dump exfat-utils iw wireless-tools cpufrequtils dc dnsutils hexer iperf lzip stress  iputils-tracepath uuidcdef zstd ntpdate rfkill smartmontools tcpdump apg p7zip-full console-setup
+```
+
 ## Building a mini Debian
 
 First, `git clone` this repository,

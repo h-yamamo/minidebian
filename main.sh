@@ -13,9 +13,14 @@ umask 022
 #export MINIDEB_TZ_JST=yes
 
 # kernel version
-kvs=$(ls /boot/vmlinuz* | \
-	sed -ne "s|^/boot/vmlinuz-\([3-7]\.[0-9]\+.\+\)$|\1|p")
+if [ -f /boot/vmlinuz* ];then
+  kvs=$(ls /boot/vmlinuz* | \
+  	sed -ne "s|^/boot/vmlinuz-\([3-7]\.[0-9]\+.\+\)$|\1|p")
+else
+  kvs=$(ls /lib/modules/)
+fi
 vn=0
+
 echo "Select linux kernel:"
 for kn in $kvs; do vn=$(expr $vn + 1); echo " $vn: $kn"; done
 if [ $vn -gt 1 ]; then
@@ -33,7 +38,7 @@ kv=$(echo $kvs | sed "s/ /\n/g" | head -${rp} | tail -1)
 
 # check
 [ ! -e /boot/initrd.img-${kv} ] && echo "initrd.img-${kv} not found" && exit 1
-[ ! -e /boot/vmlinuz-${kv} ] && echo "vmlinuz-${kv} not found" && exit 1
+( [ -e /boot/vmlinuz-${kv} ] || [ -e uImage-${kv} ] ) && echo "vmlinuz-${kv} not found" && exit 1
 
 # Source
 mkdir w0
