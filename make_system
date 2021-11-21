@@ -282,6 +282,7 @@ cfont=$(sed -ne 's|^setfont .*consolefonts/\(.*\)\.psf\.gz.*|\1|p' \
 	< /etc/console-setup/cached_setup_font.sh)
 [ -n "$cfont" ] && find /usr/share/consolefonts/$cfont.psf.gz | cpio -pdm .
 
+find /usr/share/ca-certificates/mozilla | cpio -pdm .
 find /usr/share/debootstrap | cpio -pdm .
 find /usr/share/keyrings/debian-archive-keyring.gpg | cpio -pdm .
 find /usr/share/file | cpio -pdm .
