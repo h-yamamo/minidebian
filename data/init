@@ -209,8 +209,7 @@ mount -t tmpfs -o "size=${ROOTFSSIZE:-92%},mode=0755" rootfs ${rootmnt}
 xz -d -c system.txz | tar xf - -C ${rootmnt}
 rm system.txz
 
-cp -p /sbin/blkid ${rootmnt}/sbin/
-cp -p /bin/busybox /bin/kmod ${rootmnt}/bin/
+cp -p /bin/busybox ${rootmnt}/bin/
 ln ${rootmnt}/bin/busybox ${rootmnt}/sbin/busybox
 
 arch_triple=`ls /lib | sed -ne "s|^\([ix][3468_]\+-linux-gnu.*\)$|\1|p"`

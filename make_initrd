@@ -25,12 +25,11 @@ set -x
  find conf/arch.conf etc/ld.so.conf* scripts/functions \
 	| cpio -pdm ../../w1/)
 (cd w0/main/usr/bin/;
- find [ [[ ash busybox cat chvt cp echo ipconfig kmod ln ls mkdir mount \
+ find [ [[ ash busybox cat chvt cp echo ipconfig ln ls mkdir mount \
       nuke printf rm sed setsid sh sleep tar test true xz \
       ../sbin/hwclock ../sbin/reboot ../sbin/run-init \
 	| cpio -pdm ../../../../w1/bin/)
-(cd w0/main/usr/sbin/;
- find blkid modprobe | cpio -pdm ../../../../w1/sbin/)
+ln w1/bin/busybox w1/sbin/modprobe
 
 (cd w0/main/usr/lib/;
  find klibc-*.so ld-linux*.so* | cpio -pdm ../../../../w1/lib/)
