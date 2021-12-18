@@ -144,7 +144,7 @@ if [ "$mtyp" = "ord" ]; then
     ntfs_bn="mkntfs ntfsclone"
     wifi_bn="iw iwconfig wpa_cli wpa_supplicant"
 fi
-bns01="blkid cfdisk fdisk sfdisk gdisk parted"
+bns01="blkid cfdisk fdisk sfdisk gdisk sgdisk parted"
 bns02="fsck mke2fs e2fsck tune2fs resize2fs dump restore \
   mkfs.fat fatlabel fsck.fat $ntfs_bn"
 bns03="cryptsetup dhclient dmsetup hdparm killall5 ldconfig losetup \

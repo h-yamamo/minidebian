@@ -199,6 +199,7 @@ rmmod -> /bin/kmod
 route -> busybox
 service
 sfdisk
+sgdisk
 smartctl
 start-stop-daemon
 swapoff -> busybox
