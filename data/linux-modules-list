@@ -79,6 +79,7 @@ drivers/net/mii.ko
 drivers/net/phy/fixed_phy.ko
 drivers/net/phy/libphy.ko
 drivers/net/phy/mdio_devres.ko
+drivers/net/phy/realtek.ko
 #drivers/net/ppp
 #drivers/net/slip
 drivers/net/usb/[abd-gikm-ps-y]*
