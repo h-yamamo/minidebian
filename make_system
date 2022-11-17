@@ -100,11 +100,10 @@ for x in $mods; do find /lib/modules/${kv}/kernel/$x | cpio -pdm . ; done
 cp -p /lib/modules/${kv}/modules.builtin /lib/modules/${kv}/modules.order \
 	./usr/lib/modules/${kv}/
 
-# Make sure whether dependency problem occures or not
 depmod -b . ${kv}
-# If you have installed the debug package of linux-image
-# run the following command
-#  depmod -b . -F /usr/lib/debug/boot/System.map-${kv} -ae ${kv}
+# To make sure there are no dependency issues, install the debug package of
+# linux-image and run with the options below.
+#  depmod -b . -e -F /usr/lib/debug/boot/System.map-${kv} ${kv}
 echo
 
 
