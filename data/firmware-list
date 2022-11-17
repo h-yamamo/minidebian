@@ -10,7 +10,7 @@ i915/glk_dmc_ver1_04.bin
 !i915/glk_guc_33.0.0.bin
 !i915/icl_dmc_ver1_09.bin
 !i915/icl_guc_33.0.0.bin
-!i915/kbl_dmc_ver1_04.bin
+i915/kbl_dmc_ver1_04.bin
 !i915/kbl_guc_33.0.0.bin
 !i915/rkl_dmc_ver2_02.bin
 i915/skl_dmc_ver1_27.bin
