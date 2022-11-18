@@ -83,13 +83,24 @@ Now, reboot and select 'mini Debian' from the grub menu to boot `mini Debian`.
 
 ### Boot options
 
-There is a mini Debian specific boot option `rootfssize`.
+There is a mini Debian specific boot option `rootfssize=`.
 Specify if there is a problem with the default value.
-See `man 5 tmpfs` for how to specify. e.g. `rootfssize=60%`
+See `man 5 tmpfs` for how to specify it. e.g. `rootfssize=60%` or
+`rootfssize=256m` If you have a computer with a small amount of memory,
+you should specify it. If the installed memory is 1GB,
+specify around 85% to 90%, and if it is 512MB, specify around 70% to 80%.
 
-You may also specify kernel command line options.
-If you want to change the console resolution, specify the `video` option.
-e.g. `video=800x600-16`
+You can also specify general kernel command line options. (May need to be specified.)
+
+If the console display is blank during boot, try specifying the `nomodeset` option.
+
+If you want to change the console resolution, specify the `video=` option.
+e.g. `video=800x600-16` or `video=1024x768`
+
+If you want to limit the SATA speed, specify the `libata.force=` option.
+e.g. `libata.force=3.0` or `libata.force=1.5`
+
+If you are doing a network boot, you may need to specify the `initrd=` option.
 
 ## Login accounts
 
