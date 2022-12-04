@@ -34,6 +34,13 @@ export quiet
 # Note that this only becomes /dev on the real filesystem if udev's scripts
 # are used; which they will be, but it's worth pointing out
 mount -t devtmpfs -o nosuid,mode=0755 udev /dev
+
+# Prepare the /dev directory
+[ ! -h /dev/fd ] && ln -s /proc/self/fd /dev/fd
+[ ! -h /dev/stdin ] && ln -s /proc/self/fd/0 /dev/stdin
+[ ! -h /dev/stdout ] && ln -s /proc/self/fd/1 /dev/stdout
+[ ! -h /dev/stderr ] && ln -s /proc/self/fd/2 /dev/stderr
+
 mkdir /dev/pts
 mount -t devpts -o noexec,nosuid,gid=5,mode=0620 devpts /dev/pts || true
 
@@ -247,9 +254,9 @@ ln ${rootmnt}/bin/busybox ${rootmnt}/sbin/busybox
 
 arch_triple=`ls /lib | sed -ne "s|^\([ix][3468_]\+-linux-gnu.*\)$|\1|p"`
 cp -p \
-	/lib/${arch_triple}/ld-2.*.so \
-	/lib/${arch_triple}/libc-2.*.so \
-	/lib/${arch_triple}/libresolv-2.*.so \
+	/lib/${arch_triple}/ld-linux*.so.2 \
+	/lib/${arch_triple}/libc.so.6 \
+	/lib/${arch_triple}/libresolv.so.2 \
 			${rootmnt}/lib/${arch_triple}/
 cp -p /lib/klibc-*.so ${rootmnt}/lib/
 log_end_msg

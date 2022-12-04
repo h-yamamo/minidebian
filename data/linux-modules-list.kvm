@@ -1,11 +1,10 @@
 arch/x86/crypto/aes*.ko
 arch/x86/crypto/crc[3t]*.ko
-arch/x86/crypto/glue_helper.ko
 block/t10-pi.ko
-crypto/aes_generic.ko
+#y)crypto/aes_generic.ko
 crypto/af_alg.ko
 crypto/algif_*.ko
-crypto/cbc.ko
+#y)crypto/cbc.ko
 crypto/ccm.ko
 crypto/cmac.ko
 crypto/crc3*.ko
@@ -32,13 +31,17 @@ drivers/block/virtio_blk.ko
 drivers/cdrom
 drivers/char/hw_random/rng-core.ko
 drivers/char/hw_random/virtio-rng.ko
-drivers/char/raw.ko
-drivers/gpu/drm/bochs/bochs-drm.ko
+;----------- amd64  i386(686-pae) i386(686)non-PAE
+; CONFIG_DAX=y		m		N
+drivers/dax/dax.ko
+drivers/gpu/drm/display/drm_display_helper.ko
 drivers/gpu/drm/drm.ko
 drivers/gpu/drm/drm_kms_helper.ko
+drivers/gpu/drm/drm_shmem_helper.ko
 drivers/gpu/drm/drm_ttm_helper.ko
 drivers/gpu/drm/drm_vram_helper.ko
 #drivers/gpu/drm/qxl
+drivers/gpu/drm/tiny/bochs.ko
 drivers/gpu/drm/tiny/cirrus.ko
 drivers/gpu/drm/ttm/ttm.ko
 #drivers/gpu/drm/virtio
@@ -54,6 +57,7 @@ drivers/md/md-mod.ko
 drivers/md/multipath.ko
 drivers/md/raid1.ko
 drivers/media/cec/core
+drivers/media/rc/rc-core.ko
 #y)drivers/mfd/mfd-core.ko
 drivers/net/mdio.ko
 drivers/net/mii.ko
@@ -66,6 +70,7 @@ drivers/net/phy/mdio_devres.ko
 drivers/net/virtio_net.ko
 drivers/pps/pps_core.ko
 drivers/ptp/ptp.ko
+drivers/scsi/scsi_common.ko
 drivers/scsi/scsi_mod.ko
 drivers/scsi/sd_mod.ko
 drivers/scsi/sg.ko
@@ -88,6 +93,7 @@ fs/isofs
 fs/jbd2
 #fs/lockd
 fs/mbcache.ko
+fs/netfs
 #fs/nfs
 #fs/nfs_common
 #fs/nfsd
@@ -100,13 +106,14 @@ fs/nls/nls_utf8.ko
 #fs/overlayfs
 #fs/squashfs
 fs/udf
-lib/crc-*.ko
-lib/*crc[138]*.ko
+lib/crc[136-]*.ko
+lib/libcrc32c.ko
 lib/crypto/liba*.ko
 lib/math
 #lib/zlib_deflate
 #net/bridge/netfilter
 net/core/failover.ko
+net/core/selftests.ko
 #net/ipv4/netfilter
 #net/ipv6/netfilter
 #net/netfilter

@@ -45,14 +45,16 @@ cp -a w0/main/run w2/
 
 
 # basic ld and libs
-(cd w0/main/usr/lib/;
- find klibc-*.so ld-linux*.so* | cpio -pdm ../../../../w2/usr/lib/)
+(cd w0/main/usr/lib/; find klibc-*.so | cpio -pdm ../../../../w2/usr/lib/)
 (cd w0/main/usr/lib/${arch_triple}/;
- find ld-2.*.so ld-linux*.so* libc-2.*.so libc.so.6 libdl-2.*.so libdl.so.2 \
+ find ld-linux*.so.2 libc.so.6 libdl.so.2 libresolv.so.2 \
 	| cpio -pdm ../../../../../w2/usr/lib/${arch_triple}/)
 [ "$arch_deb" = "amd64" ] && \
   (cd w0/main/usr/lib64/;
 	find ld-linux-*.so* | cpio -pdm ../../../../w2/usr/lib64/)
+[ "$arch_deb" = "i386" ] && \
+  (cd w0/main/usr/lib/;
+	find ld-linux.so.2 | cpio -pdm ../../../../w2/usr/lib/)
 [ "$arch_deb" = "x32" ] && \
   (cd w0/main/usr/libx32/;
 	find ld-linux-*.so* | cpio -pdm ../../../../w2/usr/libx32/)
@@ -65,23 +67,23 @@ cp -p w0/main/bin/busybox w2/bin/
 ln w2/usr/bin/busybox w2/usr/sbin/busybox
 
 # busybox symlink
-bbx_bin="[ [[ ar arch ash basename bunzip2 bzcat bzip2 cal cat chgrp chvt \
-  clear cmp cpio cttyhack cut deallocvt dirname dmesg dnsdomainname dos2unix \
-  dumpkmap dumpleases egrep env expand expr factor fallocate false fatattr \
-  fgrep fold free ftpget ftpput grep groups gunzip gzip head hostid hostname \
-  id ionice ipcalc kill killall last link ln logger logname lsscsi \
-  lzcat lzma lzop md5sum microcom mkdir mkfifo mknod mkpasswd mktemp more mt \
-  netstat nl nproc nslookup od openvt paste patch pidof printf pwd realpath \
-  renice rev rm rmdir rpm rpm2cpio seq setkeycodes setpriv setsid \
-  sh sha1sum sha256sum sha512sum shred sleep sort ssl_client stat strings \
-  stty sync tac tail taskset tee test tftp time timeout touch tr traceroute \
-  true truncate tty uname uncompress unexpand uniq unix2dos unlink unlzma \
-  unzip uptime usleep uudecode uuencode w watch wc which who whoami xxd \
-  yes zcat"
+bbx_bin="[ [[ ascii ar arch ash base64 basename bunzip2 bzcat bzip2 cal cat \
+  chgrp chvt clear cmp cpio crc32 cttyhack cut deallocvt dirname dmesg \
+  dnsdomainname dos2unix dumpkmap dumpleases egrep env expand expr factor \
+  fallocate false fatattr fgrep fold free ftpget ftpput grep groups gunzip \
+  gzip head hostid hostname id ionice ipcalc kill killall last link ln logger \
+  logname lsscsi lzcat lzma lzop md5sum microcom mkdir mkfifo mknod mkpasswd \
+  mktemp more mt netstat nl nproc nslookup od openvt paste patch pidof printf \
+  pwd realpath renice rev rm rmdir rpm rpm2cpio seq setkeycodes setpriv setsid \
+  sh sha1sum sha256sum sha3sum sha512sum shred sleep sort ssl_client stat \
+  strings stty sync tac tail taskset tee test tftp time timeout touch tr \
+  traceroute true truncate ts tty uname uncompress unexpand uniq unix2dos \
+  unlink unlzma unzip uptime usleep uudecode uuencode w watch wc which who \
+  whoami xxd yes zcat"
 
 bbx_sbin="acpid adjtimex arp arping blockdev blkdiscard brctl chroot \
-  devmem freeramdisk fsfreeze fstrim getty halt httpd hwclock ifconfig init \
-  ipneigh klogd linux32 linux64 loadfont loadkmap logread \
+  devmem findfs freeramdisk fsfreeze fstrim getty halt httpd hwclock ifconfig \
+  init ipneigh klogd linux32 linux64 loadfont loadkmap logread \
   mkdosfs mkswap nameif partprobe pivot_root poweroff \
   rdate reboot route swapoff swapon switch_root syslogd udhcpc udhcpd \
   vconfig watchdog"
@@ -157,11 +159,11 @@ for x in $bns; do ../copy-exec-with-shlibs /sbin/$x . ; done
 [ -z "$less_bn" ] && less_ubn="less lessecho"
 [ -x /usr/bin/unrar-nonfree ] && unrar_bn="unrar-nonfree"
 [ "$mtyp" = "ord" ] && cpu_bn="cpufreq-info cpufreq-set"
-bns="base64 bc dc diff dig dircolors $cpu_bn \
+bns="bc dc diff dig dircolors $cpu_bn \
   dpkg dpkg-deb du file eject faked-sysv find getopt gpgv hexdump hexer \
-  host iperf $less_ubn lscpu lspci lsusb lzip.lzip mawk make openssl passwd \
-  perl pstree pv scp sftp ssh setvtrgb stress tcpdump top tput tracepath \
-  traceroute6.iputils tset $unrar_bn uuidcdef vim.tiny wget xargs \
+  host iperf $less_ubn lscpu lspci lsusb lzip.lzip mawk make openssl \
+  passwd perl pstree pv scp sftp ssh setvtrgb stress tcpdump top tput \
+  tracepath tset $unrar_bn uuidcdef vim.tiny wget xargs \
   ${arch_prefix}-objdump  xz zstd"
 #	${arch_prefix}-readelf
 
@@ -169,7 +171,7 @@ for x in $bns; do ../copy-exec-with-shlibs /usr/bin/$x . ; done
 
 ## /usr/sbin/ binary executables
 bns="dmidecode dump.exfat fsck.exfat mkfs.exfat tune.exfat"
-[ "$mtyp" = "ord" ] && bns="$bns ntpdate rfkill smartctl"
+[ "$mtyp" = "ord" ] && bns="$bns rfkill smartctl"
 
 for x in $bns; do ../copy-exec-with-shlibs /usr/sbin/$x . ; done
 
@@ -188,21 +190,26 @@ for x in $pms; do find /lib/${arch_triple}/security/pam_${x}.so | cpio -pdm .
 find /usr/lib/${arch_triple}/libfakeroot/libfakeroot-sysv.so | cpio -pdm .
 
 #== custom
-if [ -f /usr/bin/ftp-ssl ]; then
+if [ -f /usr/bin/inetutils-ftp ]; then
+  ../copy-exec-with-shlibs /usr/bin/inetutils-ftp .
+  ln -s inetutils-ftp usr/bin/ftp
+  ln -s inetutils-ftp usr/bin/pftp
+elif [ -f /usr/bin/ftp-ssl ]; then
   ../copy-exec-with-shlibs /usr/bin/ftp-ssl .
   ln -s ftp-ssl usr/bin/ftp
   ln -s ftp-ssl usr/bin/pftp
-elif  [ -f /usr/bin/netkit-ftp ]; then
-  ../copy-exec-with-shlibs /usr/bin/netkit-ftp .
-  ln -s netkit-ftp usr/bin/ftp
-  ln -s netkit-ftp usr/bin/pftp
+elif [ -f /usr/bin/tnftp ]; then
+  ../copy-exec-with-shlibs /usr/bin/tnftp .
+  ln -s tnftp usr/bin/ftp
 fi
-if [ -f /usr/bin/telnet-ssl ]; then
+if [ -f /usr/bin/inetutils-telnet ]; then
+  ../copy-exec-with-shlibs /usr/bin/inetutils-telnet .
+  ln -s inetutils-telnet usr/bin/telnet
+elif [ -f /usr/bin/telnet-ssl ]; then
   ../copy-exec-with-shlibs /usr/bin/telnet-ssl .
   ln -s telnet-ssl usr/bin/telnet
-elif [ -f /usr/bin/telnet.netkit ]; then
-  ../copy-exec-with-shlibs /usr/bin/telnet.netkit .
-  ln -s telnet.netkit usr/bin/telnet
+else
+  ln -s busybox usr/bin/telnet
 fi
 
 ## scripts
@@ -245,7 +252,6 @@ ln -s fakeroot-sysv usr/bin/fakeroot
 ln -s hexdump usr/bin/hd
 ln -s mawk usr/bin/awk
 ln -s tset usr/bin/reset
-ln -s traceroute6.iputils usr/bin/traceroute6
 ln -s vim.tiny usr/bin/vi
 ln -s vim.tiny usr/bin/view
 ln -s ${arch_prefix}-objdump usr/bin/objdump
@@ -304,11 +310,10 @@ find /usr/share/debootstrap | cpio -pdm .
 find /usr/share/keyrings/debian-archive-keyring.gpg | cpio -pdm .
 find /usr/share/file | cpio -pdm .
 find /usr/lib/file/magic.mgc | cpio -pdm .
-find /usr/lib/locale/C.UTF-8 | cpio -pdm .
+find /usr/lib/locale/C.utf8 | cpio -pdm .
 #find /usr/lib/locale/en_US.utf8 | cpio -pdm .
 echo /usr/share/locale/locale.alias | cpio -pdm .
-find /usr/share/vim/vim82/debian.vim | cpio -pdm .
-find /usr/share/vim/vimrc* | cpio -pdm .
+find /usr/share/vim/vim90/debian.vim | cpio -pdm .
 
 # for file command
 mkdir -m 0755 -p usr/share/misc
@@ -408,7 +413,7 @@ if [ "$mtyp" = "kvm" ]; then
 	install -o 0 -g 0 -m 644 -p ../systemfiles.kvm/fstab etc/
 fi
 
-echo "mini Debian 11 (linux ${kv}) \\l" >etc/issue
+echo "mini Debian 12 (linux ${kv}) \\l" >etc/issue
 echo >>etc/issue
 
 set +x
@@ -419,9 +424,9 @@ echo
 set -x
 
 rm usr/*bin/busybox
-rm usr/lib/klibc-*.so  usr/lib/${arch_triple}/ld-2.*.so \
-	usr/lib/${arch_triple}/libc-2.*.so \
-	usr/lib/${arch_triple}/libresolv-2.*.so
+rm usr/lib/klibc-*.so  usr/lib/${arch_triple}/ld-linux*.so.2 \
+	usr/lib/${arch_triple}/libc.so.6 \
+	usr/lib/${arch_triple}/libresolv.so.2
 
 tar cJ --numeric-owner -f ../w1/system.txz [a-z]*
 set +x

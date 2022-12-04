@@ -35,8 +35,7 @@ ln w1/bin/busybox w1/sbin/modprobe
  find klibc-*.so ld-linux*.so* | cpio -pdm ../../../../w1/lib/)
 
 (cd w0/main/usr/lib/${arch_triple}/;
- find ld-2.*.so ld-linux*.so* libc-2.*.so libc.so.6 libdl-2.*.so libdl.so.2 \
-      libresolv-2.*.so libresolv.so.2 \
+ find ld-linux*.so.2 libc.so.6 libdl.so.2 libresolv.so.2 \
 	| cpio -pdm ../../../../../w1/lib/${arch_triple}/)
 [ "$arch_deb" = "amd64" ] && mkdir w1/lib64 && \
   (cd w0/main/usr/lib64/;

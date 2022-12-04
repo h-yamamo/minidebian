@@ -10,7 +10,7 @@ It is a small system for maintenance and rescue, and its size is about 50 MBytes
 - The /sbin/init adopts busybox init.
 - Merged /usr.
 - This system is created by copying system files from the base system.
-- Debian 11 "Bullseye" is supported as a base system.
+- Debian 12 "Bookworm" is supported as a base system.
 
 ## Requirements of machine to operating
 
@@ -53,7 +53,7 @@ make
 
 ### Copy kernel and the initrd
 
-- Copy `/boot/vmlinuz-5.10.0-N-XXX` and `initrd.img-minideb-5.10.0-N-XXX` to target.
+- Copy `/boot/vmlinuz-6.1.0-N-XXX` and `initrd.img-minideb-6.1.0-N-XXX` to target.
 - Enable booting with `grub` or `syslinux`.
 - No kernel boot option required.
 
@@ -62,15 +62,15 @@ do the following with `root` privilege.
 
 1) Copy it to boot directory
 ```
-cp (build dir)/initrd.img-minideb-5.10.0-4-amd64 /boot/
+cp (build dir)/initrd.img-minideb-6.1.0-3-amd64 /boot/
 ```
 
 2) Edit `/etc/grub.d/40_custom`
 ```
 menuentry 'mini Debian' {
     search --no-floppy --fs-uuid --set=root XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
-    linux   /boot/vmlinuz-5.10.0-4-amd64
-    initrd  /boot/initrd.img-minideb-5.10.0-4-amd64
+    linux   /boot/vmlinuz-6.1.0-3-amd64
+    initrd  /boot/initrd.img-minideb-6.1.0-3-amd64
 }
 ```
 
@@ -138,6 +138,7 @@ dump.exfat
 e2fsck
 fatlabel
 fdisk
+findfs -> busybox
 freeramdisk -> busybox
 fsck
 fsck.exfat
@@ -194,7 +195,6 @@ mount.ntfs -> mount.ntfs-3g
 mount.ntfs-3g -> /bin/ntfs-3g
 nameif -> busybox
 ntfsclone
-ntpdate
 pam-auth-update
 pam_getenv
 parted
@@ -237,9 +237,10 @@ $ ls -l /usr/bin/ | sed 's/\ \+/ /g' | cut -d ' ' -f 9-
 apg
 ar -> busybox
 arch -> busybox
+ascii -> busybox
 ash -> busybox
 awk -> mawk
-base64
+base64 -> busybox
 basename -> busybox
 bash
 bc
@@ -260,6 +261,7 @@ cp
 cpio -> busybox
 cpufreq-info
 cpufreq-set
+crc32 -> busybox
 cttyhack -> busybox
 cut -> busybox
 date
@@ -298,7 +300,7 @@ file
 find
 fold -> busybox
 free -> busybox
-ftp -> netkit-ftp
+ftp -> inetutils-ftp
 ftpget -> busybox
 ftpput -> busybox
 fuser
@@ -316,6 +318,8 @@ host
 hostid -> busybox
 hostname -> busybox
 id -> busybox
+inetutils-ftp
+inetutils-telnet
 ionice -> busybox
 ip
 ipcalc -> busybox
@@ -365,7 +369,6 @@ mt -> busybox
 mv
 nc -> nc.openbsd
 nc.openbsd
-netkit-ftp
 netstat -> busybox
 nl -> busybox
 nproc -> busybox
@@ -382,7 +385,7 @@ passwd
 paste -> busybox
 patch -> busybox
 perl
-pftp -> netkit-ftp
+pftp -> inetutils-ftp
 pidof -> busybox
 ping
 ping4 -> ping
@@ -416,6 +419,7 @@ sftp
 sh -> busybox
 sha1sum -> busybox
 sha256sum -> busybox
+sha3sum -> busybox
 sha512sum -> busybox
 shred -> busybox
 sleep -> busybox
@@ -436,8 +440,7 @@ tar
 taskset -> busybox
 tcpdump
 tee -> busybox
-telnet -> telnet.netkit
-telnet.netkit
+telnet -> inetutils-telnet
 test -> busybox
 tftp -> busybox
 time -> busybox
@@ -448,10 +451,9 @@ tput
 tr -> busybox
 tracepath
 traceroute -> busybox
-traceroute6 -> traceroute6.iputils
-traceroute6.iputils
 true -> busybox
 truncate -> busybox
+ts -> busybox
 tset
 tty -> busybox
 udevadm

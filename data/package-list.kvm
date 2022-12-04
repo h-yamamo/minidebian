@@ -19,11 +19,12 @@ exfatprogs
 fakeroot
 fdisk
 file
-ftp
 gdisk
 gpgv
 hdparm
 hexer
+inetutils-ftp
+inetutils-telnet
 initramfs-tools
 initscripts
 iperf
@@ -50,7 +51,6 @@ strace
 stress
 sysv-rc
 tcpdump
-telnet
 tzdata
 unrar
 usbutils

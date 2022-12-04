@@ -23,11 +23,12 @@ file
 firmware-linux-free
 firmware-misc-nonfree
 firmware-realtek
-ftp
 gdisk
 gpgv
 hdparm
 hexer
+inetutils-ftp
+inetutils-telnet
 initramfs-tools
 initscripts
 iperf
@@ -43,7 +44,6 @@ lzip
 make
 netcat-openbsd
 ntfs-3g
-ntpdate
 openssh-client
 p7zip-full
 parted
@@ -58,7 +58,6 @@ strace
 stress
 sysv-rc
 tcpdump
-telnet
 tzdata
 unrar
 usbutils

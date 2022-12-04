@@ -4,7 +4,6 @@ console-setup/cached_setup_*
 default/devpts
 default/halt
 default/keyboard
-default/ntpdate
 default/rcS
 dhcp/dhclient.conf
 environment

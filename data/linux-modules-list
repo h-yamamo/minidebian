@@ -1,11 +1,10 @@
 arch/x86/crypto/aes*.ko
 arch/x86/crypto/crc[3t]*.ko
-arch/x86/crypto/glue_helper.ko
 block/t10-pi.ko
-crypto/aes_generic.ko
+#y)crypto/aes_generic.ko
 crypto/af_alg.ko
 crypto/algif_*.ko
-crypto/cbc.ko
+#y)crypto/cbc.ko
 crypto/ccm.ko
 crypto/cmac.ko
 crypto/crc3*.ko
@@ -35,11 +34,17 @@ drivers/bcma
 drivers/block/floppy.ko
 drivers/block/loop.ko
 drivers/cdrom
-drivers/char/raw.ko
 drivers/char/hw_random/rng-core.ko
 drivers/cpufreq
+;----------- amd64  i386(686-pae) i386(686)non-PAE
+; CONFIG_DAX=y		m		N
+drivers/dax/dax.ko
+drivers/gpu/drm/display/drm_display_helper.ko
 drivers/gpu/drm/drm.ko
+drivers/gpu/drm/drm_buddy.ko
 drivers/gpu/drm/drm_kms_helper.ko
+drivers/gpu/drm/drm_shmem_helper.ko
+drivers/gpu/drm/drm_ttm_helper.ko
 drivers/gpu/drm/i915/i915.ko
 drivers/gpu/drm/radeon
 drivers/gpu/drm/tiny/cirrus.ko
@@ -59,6 +64,7 @@ drivers/md/md-mod.ko
 drivers/md/multipath.ko
 drivers/md/raid1.ko
 drivers/media/cec/core
+drivers/media/rc/rc-core.ko
 #y)drivers/mfd/mfd-core.ko
 drivers/misc/cardreader/rtsx_pci.ko
 drivers/mmc/core/mmc_*.ko
@@ -73,6 +79,7 @@ drivers/net/ethernet/realtek
 drivers/net/ethernet/broadcom/tg3.ko
 drivers/net/ethernet/intel/e100*
 ; CONFIG_OF_MDIO=m : only i386(686)non-PAE
+drivers/net/mdio/fwnode_mdio.ko
 drivers/net/mdio/of_mdio.ko
 drivers/net/mdio.ko
 drivers/net/mii.ko
@@ -97,6 +104,7 @@ drivers/nvme/host/nvme.ko
 drivers/pcmcia
 drivers/pps/pps_core.ko
 drivers/ptp/ptp.ko
+drivers/scsi/scsi_common.ko
 drivers/scsi/scsi_mod.ko
 drivers/scsi/sd_mod.ko
 drivers/scsi/sg.ko
@@ -129,6 +137,7 @@ fs/isofs
 fs/jbd2
 #fs/lockd
 fs/mbcache.ko
+fs/netfs
 #fs/nfs
 #fs/nfs_common
 #fs/nfsd
@@ -141,12 +150,13 @@ fs/nls/nls_utf8.ko
 #fs/overlayfs
 #fs/squashfs
 fs/udf
-lib/crc-*.ko
-lib/*crc[138]*.ko
+lib/crc[136-]*.ko
+lib/libcrc32c.ko
 lib/crypto/liba*.ko
 lib/math
 #lib/zlib_deflate
 #net/bridge/netfilter
+net/core/selftests.ko
 #net/ipv4/netfilter
 #net/ipv6/netfilter
 net/mac80211
