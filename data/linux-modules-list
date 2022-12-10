@@ -86,6 +86,7 @@ drivers/net/mii.ko
 drivers/net/phy/fixed_phy.ko
 drivers/net/phy/libphy.ko
 drivers/net/phy/mdio_devres.ko
+drivers/net/phy/phylink.ko
 drivers/net/phy/realtek.ko
 #drivers/net/ppp
 #drivers/net/slip
@@ -102,6 +103,7 @@ drivers/nvme/host/nvme-core.ko
 drivers/nvme/host/nvme.ko
 #drivers/platform/x86/thinkpad_acpi.ko
 drivers/pcmcia
+drivers/platform/x86/wmi.ko
 drivers/pps/pps_core.ko
 drivers/ptp/ptp.ko
 drivers/scsi/scsi_common.ko
