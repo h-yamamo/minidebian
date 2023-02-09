@@ -36,7 +36,8 @@ Run the following as `root` in the working directory.
 
 ### Required debian package installation
 
-Make sure `non-free` component is specified in `/etc/apt/sources.list`.
+Make sure `non-free` and `non-free-firmware` components are specified in
+`/etc/apt/sources.list`.
 
 ```
 make prepare_package
