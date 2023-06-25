@@ -95,9 +95,6 @@ You can also specify general kernel command line options. (May need to be specif
 
 If the console display is blank during boot, try specifying the `nomodeset` option.
 
-If you want to change the console resolution, specify the `video=` option.
-e.g. `video=800x600-16` or `video=1024x768`
-
 If you want to limit the SATA speed, specify the `libata.force=` option.
 e.g. `libata.force=3.0` or `libata.force=1.5`
 
