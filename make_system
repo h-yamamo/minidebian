@@ -177,6 +177,7 @@ for x in $bns; do ../copy-exec-with-shlibs /usr/sbin/$x . ; done
 ../copy-exec-with-shlibs /lib/${arch_triple}/security/pam_unix.so .
 ../copy-exec-with-shlibs /usr/lib/apg/apg .
 ../copy-exec-with-shlibs /usr/lib/p7zip/7z .
+../copy-exec-with-shlibs /usr/lib/p7zip/7z.so .
 
 ## manually copy shared libs
 find /lib/${arch_triple}/libnss_[cdf]* | cpio -pdm .
