@@ -78,6 +78,7 @@ drivers/net/ethernet/realtek
 #drivers/net/ethernet/broadcom/bnx*
 drivers/net/ethernet/broadcom/tg3.ko
 drivers/net/ethernet/intel/e100*
+drivers/net/ethernet/intel/igc
 ; CONFIG_OF_MDIO=m : only i386(686)non-PAE
 drivers/net/mdio/fwnode_mdio.ko
 drivers/net/mdio/of_mdio.ko
@@ -91,6 +92,8 @@ drivers/net/phy/realtek.ko
 #drivers/net/ppp
 #drivers/net/slip
 drivers/net/usb/[abd-gikm-ps-y]*
+drivers/net/usb/cdc_ether.ko
+drivers/net/usb/rndis_host.ko
 drivers/net/wireless/broadcom/b43
 drivers/net/wireless/intel/iwlegacy
 drivers/net/wireless/intel/iwlwifi
